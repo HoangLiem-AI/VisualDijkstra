@@ -115,6 +115,16 @@ Nguyên tắc ghi:
 - **Kiểm chứng của SV:** _(...)_
 - **Commit / ảnh chụp:** "Thêm README hướng dẫn cách chạy"
 
+### #6 — 14/10/2026 — Gắn remote GitHub
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** thiết lập dự án.
+- **Prompt (nguyên văn):**
+  > git remote add origin https://github.com/HoangLiem-AI/VisualDijkstra.git
+- **Kết quả AI trả về (tóm tắt):** chạy lệnh trên; `git ls-remote origin` kết nối được, repo trên GitHub còn rỗng. Chưa push.
+- **File tạo / sửa:** `DEVLOG.md`.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Ghi DEVLOG: gắn remote GitHub"
+
 ---
 
 ## Nhật ký lỗi
