@@ -1,0 +1,54 @@
+// graph.js — Biểu diễn đồ thị bằng danh sách kề.
+// Đỉnh đánh số 1..n; các mảng có kích thước n + 1, ô số 0 bỏ trống.
+// Không dùng DOM: chạy được cả trên trình duyệt lẫn Node.
+
+/** Lỗi do đồ thị không thỏa điều kiện của thuật toán (ví dụ cạnh âm với Dijkstra). */
+export class GraphError extends Error {
+  constructor(code, message) {
+    super(message);
+    this.name = 'GraphError';
+    this.code = code;
+  }
+}
+
+/**
+ * Tạo đồ thị từ danh sách cạnh.
+ * @param {number} n số đỉnh
+ * @param {{u:number, v:number, w:number}[]} edges danh sách cạnh
+ * @param {{directed?: boolean}} options mặc định có hướng
+ * @returns {{n:number, directed:boolean, edges:object[], adj:object[][]}}
+ */
+export function createGraph(n, edges, { directed = true } = {}) {
+  const adj = Array.from({ length: n + 1 }, () => []);
+  const list = [];
+
+  edges.forEach((e, id) => {
+    const edge = { id, u: e.u, v: e.v, w: e.w };
+    list.push(edge);
+    adj[e.u].push(edge);
+    // Vô hướng: thêm cạnh ngược, giữ cùng id để giao diện tô đúng một cạnh
+    if (!directed) adj[e.v].push({ id, u: e.v, v: e.u, w: e.w });
+  });
+
+  return { n, directed, edges: list, adj };
+}
+
+/** Đồ thị có cạnh trọng số âm hay không. */
+export function hasNegativeEdge(graph) {
+  return graph.edges.some((e) => e.w < 0);
+}
+
+/**
+ * Dựng lại đường đi s → t từ mảng prev.
+ * @returns {number[] | null} dãy đỉnh, hoặc null nếu t không tới được
+ */
+export function buildPath(prev, dist, s, t) {
+  if (dist[t] === Infinity) return null;
+  const path = [];
+  for (let v = t; v !== null; v = prev[v]) {
+    path.push(v);
+    if (path.length > prev.length) return null; // phòng vòng lặp do prev sai
+  }
+  path.reverse();
+  return path[0] === s ? path : null;
+}

@@ -1,0 +1,9 @@
+{
+  "name": "cs112-dijkstra",
+  "private": true,
+  "type": "module",
+  "description": "Mô phỏng thuật toán Dijkstra — CS112",
+  "scripts": {
+    "demo": "node scripts/demo-trace.js"
+  }
+}
