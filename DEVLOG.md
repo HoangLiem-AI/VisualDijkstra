@@ -102,6 +102,19 @@ Nguyên tắc ghi:
 - **Kiểm chứng của SV:** _(...)_
 - **Commit / ảnh chụp:** "Khung dự án, parser, min-heap, Dijkstra heap sinh trace"
 
+### #5 — 14/10/2026 — README hướng dẫn cách chạy
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** tài liệu.
+- **Prompt (nguyên văn):**
+  > tạo giúp tôi 1 file readme hướng dẫn cách chạy luôn đi
+- **Kết quả AI trả về (tóm tắt):**
+  - Tạo `README.md` ở thư mục gốc gồm: cài Node.js, các lệnh chạy (đồ thị mẫu, đọc file, `--vo-huong`, `npm run demo`), định dạng input kèm ví dụ, cách đọc trace (bảng ý nghĩa các loại bước), output mẫu, các thông báo lỗi khi input sai, cấu trúc thư mục.
+  - Giữ `1_SourceCode/README.md` làm tài liệu kỹ thuật (cấu trúc một bước trace).
+- **File tạo / sửa:** `README.md` (mới), `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:** đã chạy lại `npm run demo` và chạy ví dụ chép từ README ra file `.in`; cả hai cho output đúng như README ghi.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thêm README hướng dẫn cách chạy"
+
 ---
 
 ## Nhật ký lỗi
