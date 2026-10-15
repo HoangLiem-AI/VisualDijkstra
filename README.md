@@ -2,7 +2,9 @@
 
 Mô phỏng từng bước thuật toán Dijkstra (dùng min-heap) tìm đường đi ngắn nhất từ một đỉnh nguồn.
 
-> Trạng thái hiện tại: đã có lõi thuật toán và script chạy trên console. **Giao diện web chưa làm.**
+Có hai cách dùng:
+- **Giao diện web**: nhập đồ thị, xem từng bước trên hình vẽ (mục 2).
+- **Script console**: in toàn bộ các bước ra terminal, dùng để kiểm tra nhanh (mục 3).
 
 ## 1. Cài đặt
 
@@ -16,23 +18,58 @@ Nếu báo không tìm thấy lệnh `node`:
 - Windows: `winget install OpenJS.NodeJS.LTS`, hoặc tải bản LTS ở https://nodejs.org
 - Cài xong thì **mở terminal mới** để nhận lệnh `node`.
 
-## 2. Chạy thử
+## 2. Chạy giao diện web
 
-Mọi lệnh chạy trong thư mục `1_SourceCode`:
 ```
 cd 1_SourceCode
+npm start
 ```
+(hoặc `node scripts/serve.js`). Sau đó mở trình duyệt vào **http://localhost:8080**. Nhấn `Ctrl+C` trong terminal để dừng server.
+
+> **Không mở `index.html` bằng cách double-click.** Trình duyệt chặn JavaScript module khi mở file trực tiếp (`file://`), trang sẽ trống. Luôn mở qua server như trên.
+>
+> Cổng 8080 bị chiếm thì đổi cổng: `node scripts/serve.js 8081`.
+> Lần đầu mở trang cần có Internet để tải thư viện vẽ đồ thị Cytoscape.js.
+
+Cách khác, nếu không muốn dùng Node:
+- VS Code: cài extension **Live Server**, chuột phải `1_SourceCode/index.html` → *Open with Live Server*.
+- Python: `cd 1_SourceCode` rồi `python -m http.server 8080`.
+
+### Sử dụng
+
+1. **Nhập đồ thị** ở ô *Input* (cột trái), hoặc chọn một ví dụ có sẵn. Đánh dấu *Đồ thị vô hướng* nếu cần. Bấm **Chạy thuật toán** (hoặc `Ctrl+Enter`).
+2. **Xem từng bước** bằng các nút dưới đồ thị:
+
+   | Nút | Phím tắt | Tác dụng |
+   |---|---|---|
+   | ⏮ / ⏭ | `Home` / `End` | Về bước đầu / tới bước cuối |
+   | ◀ Lùi / Tiến ▶ | `←` / `→` | Lùi / tiến một bước |
+   | ▶ Tự chạy | `Space` | Tự động chạy, bấm lại để tạm dừng |
+   | Thanh trượt dài | | Kéo để nhảy tới bước bất kỳ |
+   | Tốc độ | | Tốc độ khi tự chạy |
+
+   Có thể bấm vào một dòng trong *Nhật ký các bước* để nhảy tới bước đó, kéo thả đỉnh để sắp lại hình, nút *⟳ Bố cục* để đổi kiểu sắp xếp.
+3. **Theo dõi** ở các khung:
+   - *Đồ thị*: mỗi đỉnh ghi `số đỉnh` và `dist` hiện tại. Màu: xám = chưa thăm, xanh dương = tạm thời, cam = đang xét, xanh lá = đã chốt. Cạnh xanh lá = relax thành công, đỏ nét đứt = relax không cải thiện, xanh dương = cây `prev`, tím = đường đi ngắn nhất s → t (ở bước cuối).
+   - *Pseudo-code*: dòng đang chạy được tô sáng.
+   - *Hàng đợi ưu tiên*: các phần tử trong min-heap; phần tử gạch ngang là bản cũ, sẽ bị bỏ qua khi lấy ra (lazy deletion).
+   - *Bảng dist / prev*: khoảng cách và đỉnh đứng trước của từng đỉnh.
+4. **Output** hiện ở cột trái khi tới bước cuối, đúng định dạng như script console.
+
+Giao diện chỉ mô phỏng đồ thị tối đa 30 đỉnh, 150 cạnh; đồ thị lớn hơn hãy dùng script.
+
+## 3. Chạy bằng script console
+
+Mọi lệnh chạy trong thư mục `1_SourceCode`:
 
 | Mục đích | Lệnh |
 |---|---|
-| Chạy đồ thị mẫu 6 đỉnh có sẵn | `node scripts/demo-trace.js` |
+| Chạy đồ thị mẫu 6 đỉnh có sẵn | `node scripts/demo-trace.js` (hoặc `npm run demo`) |
 | Chạy với input từ file | `node scripts/demo-trace.js duong/dan/file.in` |
 | Coi đồ thị là vô hướng | `node scripts/demo-trace.js duong/dan/file.in --vo-huong` |
 | Lưu kết quả ra file | `node scripts/demo-trace.js > ket-qua.txt` |
 
-Hoặc dùng npm: `npm run demo` (tương đương lệnh đầu tiên).
-
-## 3. Định dạng input
+## 4. Định dạng input
 
 ```
 n m s [t]
@@ -60,7 +97,7 @@ Ví dụ (đây chính là đồ thị mẫu, lưu thành `vi-du.in`):
 6 4 1
 ```
 
-## 4. Đọc kết quả
+## 5. Đọc kết quả của script console
 
 Script in ra 4 phần:
 
@@ -98,9 +135,9 @@ Output của ví dụ trên:
 1 -> 3 -> 2 -> 4 -> 5 -> 6
 ```
 
-## 5. Khi input sai
+## 6. Khi input sai
 
-Script không crash mà in `Lỗi: ...` kèm số dòng, ví dụ:
+Chương trình không crash mà báo lỗi kèm số dòng (giao diện web hiện khung đỏ dưới nút *Chạy*, script in `Lỗi: ...`), ví dụ:
 ```
 Lỗi: Dòng 2: "x" không phải số nguyên (w)
 Lỗi: Dòng 1: s = 4 nằm ngoài khoảng [1, 3]
@@ -108,13 +145,14 @@ Lỗi: khai báo m = 3 cạnh nhưng chỉ có 1 dòng cạnh
 Lỗi: Đồ thị có cạnh trọng số âm: Dijkstra không đảm bảo đúng. Hãy dùng Bellman-Ford.
 ```
 
-## 6. Cấu trúc thư mục
+## 7. Cấu trúc thư mục
 
 ```
 1_SourceCode/      mã nguồn (chi tiết kỹ thuật: 1_SourceCode/README.md)
-  src/core/        lõi thuật toán: graph, parser, min-heap, dijkstra-heap
-  src/ui/          giao diện (chưa làm)
-  scripts/         script Node: demo-trace.js
+  index.html, style.css   trang web
+  src/core/        lõi thuật toán: graph, parser, min-heap, dijkstra-heap, samples
+  src/ui/          giao diện: renderer (vẽ đồ thị), player (Tiến/Lùi/Tự chạy), panels, app
+  scripts/         script Node: serve.js (server tĩnh), demo-trace.js
 3_Testcase/        bộ testcase (chưa có)
 4_Report/          báo cáo
 CLAUDE.md          quy ước dự án cho Claude Code

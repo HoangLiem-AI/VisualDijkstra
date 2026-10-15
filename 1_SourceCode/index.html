@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mô phỏng Dijkstra</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Cytoscape.js vẽ đồ thị (cần Internet lần đầu tải trang) -->
+  <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+  <script type="module" src="src/ui/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>Mô phỏng thuật toán Dijkstra</h1>
+    <span class="subtitle">CS112 · Phân tích và thiết kế thuật toán · Dijkstra dùng min-heap</span>
+  </header>
+
+  <main class="layout">
+    <!-- Cột trái: input, output, nhật ký -->
+    <section class="col">
+      <div class="card">
+        <h2>Input</h2>
+        <label class="field">Ví dụ có sẵn
+          <select id="sample"></select>
+        </label>
+        <textarea id="input" spellcheck="false" rows="13" aria-label="Input đồ thị"></textarea>
+        <p class="hint">Dòng đầu <code>n m s [t]</code>, mỗi dòng sau <code>u v w</code>. Nhấn <kbd>Ctrl</kbd>+<kbd>Enter</kbd> để chạy.</p>
+        <label class="check"><input type="checkbox" id="undirected"> Đồ thị vô hướng</label>
+        <button id="run" class="primary">Chạy thuật toán</button>
+        <div id="error" class="error" role="alert" hidden></div>
+      </div>
+
+      <div class="card">
+        <h2>Output</h2>
+        <pre id="output" class="output"></pre>
+      </div>
+
+      <div class="card">
+        <h2>Nhật ký các bước</h2>
+        <ol id="log" class="log"></ol>
+      </div>
+    </section>
+
+    <!-- Cột giữa: đồ thị và điều khiển -->
+    <section class="col col-center">
+      <div class="card graph-card">
+        <div id="graph" class="graph"></div>
+        <div class="graph-tools">
+          <button id="btn-layout" title="Đổi kiểu bố cục">⟳ Bố cục</button>
+          <button id="btn-fit" title="Thu phóng vừa khung">⤢ Vừa khung</button>
+        </div>
+      </div>
+
+      <div class="card step-card">
+        <div class="message">
+          <span id="step-type" class="badge"></span>
+          <span id="step-message"></span>
+        </div>
+        <div class="controls">
+          <button id="btn-first" title="Về bước đầu (Home)">⏮</button>
+          <button id="btn-prev" title="Lùi (←)">◀ Lùi</button>
+          <button id="btn-play" class="primary" title="Tự chạy / Tạm dừng (Space)">▶ Tự chạy</button>
+          <button id="btn-next" title="Tiến (→)">Tiến ▶</button>
+          <button id="btn-last" title="Tới bước cuối (End)">⏭</button>
+          <span id="counter" class="counter">Bước 0 / 0</span>
+          <label class="speed">Tốc độ <input id="speed" type="range" min="1" max="10" value="6"></label>
+        </div>
+        <input id="timeline" class="timeline" type="range" min="0" max="0" value="0" aria-label="Chọn bước">
+      </div>
+
+      <div class="legend">
+        <span><i class="dot idle"></i>Chưa thăm (∞)</span>
+        <span><i class="dot frontier"></i>Tạm thời (trong hàng đợi)</span>
+        <span><i class="dot current"></i>Đang xét</span>
+        <span><i class="dot finalized"></i>Đã chốt</span>
+        <span><i class="line tree"></i>Cây prev</span>
+        <span><i class="line ok"></i>Relax thành công</span>
+        <span><i class="line fail"></i>Relax không cải thiện</span>
+        <span><i class="line path"></i>Đường đi s → t</span>
+        <span><i class="dot source"></i>Nguồn s</span>
+        <span><i class="dot target"></i>Đích t</span>
+      </div>
+    </section>
+
+    <!-- Cột phải: trạng thái thuật toán -->
+    <section class="col">
+      <div class="card">
+        <h2>Pseudo-code</h2>
+        <ol id="pseudo" class="pseudo"></ol>
+      </div>
+
+      <div class="card">
+        <h2>Hàng đợi ưu tiên <small>(sắp tăng dần)</small></h2>
+        <div id="pq" class="pq"></div>
+        <p class="hint">Phần tử gạch ngang là bản cũ (lazy deletion), sẽ bị bỏ qua khi lấy ra.</p>
+      </div>
+
+      <div class="card">
+        <h2>Bảng dist / prev</h2>
+        <table id="dist-table" class="dist-table"></table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">Phím tắt: <kbd>←</kbd> <kbd>→</kbd> lùi/tiến · <kbd>Space</kbd> tự chạy · <kbd>Home</kbd> <kbd>End</kbd> đầu/cuối · kéo thả đỉnh để sắp lại</footer>
+</body>
+</html>

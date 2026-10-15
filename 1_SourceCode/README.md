@@ -6,12 +6,18 @@
   - `parser.js`: đọc input / ghi output, `InputError`
   - `min-heap.js`: heap nhị phân
   - `dijkstra-heap.js`: Dijkstra + min-heap (lazy deletion), trả về `{ result, trace }`
-- `src/ui/` — giao diện (chưa làm)
-- `scripts/` — script Node
+  - `samples.js`: đồ thị ví dụ dùng chung cho web và script
+- `src/ui/` — giao diện, chỉ phát lại trace
+  - `renderer.js`: vẽ đồ thị bằng Cytoscape.js, tô màu theo bước
+  - `player.js`: Tiến / Lùi / Tự chạy (không đụng DOM)
+  - `panels.js`: pseudo-code, bảng dist/prev, hàng đợi, nhật ký
+  - `app.js`: nối input → lõi → player → các khung hiển thị
+- `scripts/` — script Node: `serve.js` (server tĩnh), `demo-trace.js`
 
-## Chạy thử (cần Node.js ≥ 18)
+## Chạy (cần Node.js ≥ 18)
 ```
 cd 1_SourceCode
+npm start                                   # giao diện web: http://localhost:8080
 node scripts/demo-trace.js                  # đồ thị mẫu 6 đỉnh
 node scripts/demo-trace.js file.in          # đọc từ file
 node scripts/demo-trace.js file.in --vo-huong

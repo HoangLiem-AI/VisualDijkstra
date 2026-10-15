@@ -13,7 +13,7 @@ Nguyên tắc ghi:
 |---|---|---|
 | Claude trên claude.ai (Project "Phân tích và thiết kế thuật toán", có đính kèm slide và đề thi của môn) | Claude Opus 5.5 | Phân tích đề, lập kế hoạch, hỏi lý thuyết |
 | Claude Code (CLI) | Claude Opus 5.5 | Viết code, sinh testcase, script kiểm thử |
-| Cytoscape.js | _(phiên bản)_ | Vẽ đồ thị trên giao diện |
+| Cytoscape.js | 3.30.2 (CDN jsDelivr) | Vẽ đồ thị trên giao diện |
 | Node.js | 24.20.0 LTS | Chạy testcase, benchmark |
 
 ## Mẫu một mục nhật ký
@@ -125,6 +125,36 @@ Nguyên tắc ghi:
 - **Kiểm chứng của SV:** _(...)_
 - **Commit / ảnh chụp:** "Ghi DEVLOG: gắn remote GitHub"
 
+### #7 — 15/10/2026 — Hỏi cách chạy (chưa có web)
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** hỏi đáp.
+- **Prompt (nguyên văn):**
+  > ủa hiện tại tôi phải chạy làm sao? sẽ dựng 1 trang web chứ nhỉ
+- **Kết quả AI trả về (tóm tắt):** giải thích hiện mới có lõi + script console (do yêu cầu #4 ghi "Chưa làm giao diện"); mô tả trang web dự kiến theo CLAUDE.md; lưu ý phải mở qua server vì trình duyệt chặn ES modules khi mở `file://`. Không sửa file.
+- **Kiểm chứng của SV:** _(...)_
+
+### #8 — 15/10/2026 — Giao diện web mô phỏng từng bước
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5; Claude in Chrome để kiểm tra trang.
+- **Công đoạn:** code.
+- **Prompt (nguyên văn):**
+  > có làm luôn đi, cập nhật trên readme luôn
+- **Kết quả AI trả về (tóm tắt):**
+  - Trang web 3 cột: Input / Output / Nhật ký các bước — Đồ thị + điều khiển + chú thích màu — Pseudo-code / Hàng đợi ưu tiên / Bảng dist-prev.
+  - `renderer.js`: vẽ bằng Cytoscape.js 3.30.2 (CDN jsDelivr). Đỉnh ghi số đỉnh và dist; màu theo trạng thái (chưa thăm / tạm thời / đang xét / đã chốt); cạnh đang relax xanh (thành công) hoặc đỏ nét đứt (không cải thiện); tô cây `prev`; bước cuối tô đường đi s → t. 3 kiểu bố cục (cây theo tầng, vòng tròn, lực đẩy), kéo thả đỉnh được.
+  - `player.js`: Tiến / Lùi / Đầu / Cuối / Tự chạy / tốc độ, không đụng DOM. Thanh trượt nhảy tới bước bất kỳ; phím tắt ← → Space Home End.
+  - `panels.js`: pseudo-code tô dòng đang chạy (màu theo loại bước); hàng đợi gạch ngang phần tử cũ để minh họa lazy deletion; bảng dist/prev tô dòng đang xét; nhật ký chỉ hiện các bước đã chạy, bấm vào để nhảy tới bước đó.
+  - `app.js`: đọc input → gọi `dijkstraHeap` lấy trace → phát lại. Giao diện không tự tính lại thuật toán. Giới hạn ≤ 30 đỉnh, ≤ 150 cạnh. Lỗi input / cạnh âm hiện khung đỏ, không crash.
+  - `src/core/samples.js`: 4 ví dụ (6 đỉnh thống nhất, vô hướng 5 đỉnh, có đỉnh không tới được, có cạnh âm). `demo-trace.js` lấy đồ thị mẫu từ đây, để web và script dùng chung đúng một đồ thị.
+  - `scripts/serve.js`: server tĩnh không cần cài gói (`npm start` → http://localhost:8080), chặn đọc file ngoài `1_SourceCode`.
+  - README gốc: thêm mục "Chạy giao diện web" (cách mở, cảnh báo không double-click `index.html`, cách khác bằng Live Server / Python, bảng nút và phím tắt, ý nghĩa màu); đánh lại số mục. README trong `1_SourceCode` cập nhật cấu trúc và lệnh chạy.
+- **File tạo / sửa:** `1_SourceCode/{index.html, style.css, package.json, README.md}`, `1_SourceCode/src/ui/{app.js, renderer.js, player.js, panels.js}`, `1_SourceCode/src/core/samples.js`, `1_SourceCode/scripts/{serve.js, demo-trace.js}`, `README.md`, `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:**
+  - Pseudo-code dùng khoảng trắng để căn chú thích `▷` nên trên web bị xuống dòng khó đọc → khi hiển thị tách phần chú thích ra, bỏ khoảng trắng căn lề, tô màu nhạt.
+  - Kiểm tra trên Chrome: ví dụ 6 đỉnh ra 23 bước, output `0 3 1 8 10 13` và đường đi `1 -> 3 -> 2 -> 4 -> 5 -> 6`, khớp script console. Ví dụ vô hướng, không tới được (in -1), cạnh âm (báo lỗi) đều đúng; console trình duyệt không có lỗi.
+  - Chưa xử lý: ở bước `skip-stale`, đỉnh bị bỏ qua vẫn tô màu cam "đang xét"; thông báo bên dưới đã giải thích nên tạm giữ.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Giao diện web mô phỏng từng bước Dijkstra (heap)"
+
 ---
 
 ## Nhật ký lỗi
@@ -145,3 +175,5 @@ Dòng ghi "(đề xuất)" là gợi ý của AI; SV xác nhận hoặc sửa l�
 | 14/10 | (đề xuất) Web tĩnh + Cytoscape.js; script bằng Node | Python (Streamlit/PyQt); .NET (Blazor/WPF) | Vẽ đồ thị tốt, chạy trên trình duyệt, deploy dễ |
 | 14/10 | (đề xuất) Lazy deletion kiểm tra "u đã chốt"; không relax tới đỉnh đã chốt | Kiểm tra `d > dist[u]` và cho xử lý lại đỉnh | Giữ đúng Dijkstra kinh điển để minh họa sai với cạnh âm |
 | 14/10 | (đề xuất) Parser cho phép w âm; Dijkstra tự báo lỗi cạnh âm | Parser cấm cạnh âm | Dùng chung parser cho Bellman-Ford |
+| 15/10 | (đề xuất) Mở web qua server tĩnh tự viết `scripts/serve.js` | `npx serve` (phải tải gói); mở trực tiếp file:// (bị chặn ES modules) | Không cần cài thêm gì ngoài Node |
+| 15/10 | (đề xuất) Đồ thị ví dụ để ở `src/core/samples.js` | Mỗi nơi tự chép đồ thị | Web, script, report, video dùng đúng một đồ thị |

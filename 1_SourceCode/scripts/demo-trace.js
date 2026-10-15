@@ -8,22 +8,10 @@ import { readFileSync } from 'node:fs';
 import { parseInput, formatOutput, InputError } from '../src/core/parser.js';
 import { createGraph, GraphError } from '../src/core/graph.js';
 import { dijkstraHeap, PSEUDO_CODE } from '../src/core/dijkstra-heap.js';
+import { SAMPLES } from '../src/core/samples.js';
 
-// Đồ thị mẫu 6 đỉnh, có hướng, s = 1, t = 6.
-// Được chọn để trace có đủ các loại bước: relax-ok, relax-fail (chưa chốt và đã chốt), skip-stale.
-const SAMPLE = `6 11 1 6
-1 2 4
-1 3 1
-3 2 2
-2 4 5
-3 4 8
-3 5 10
-2 5 9
-4 5 2
-4 6 6
-5 6 3
-6 4 1
-`;
+// Đồ thị mẫu 6 đỉnh (ví dụ thống nhất), dùng chung với giao diện web.
+const SAMPLE = SAMPLES[0].text;
 
 const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith('--'));
