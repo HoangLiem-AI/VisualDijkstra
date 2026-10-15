@@ -31,6 +31,14 @@ npm start
 > Cổng 8080 bị chiếm thì đổi cổng: `node scripts/serve.js 8081`.
 > Lần đầu mở trang cần có Internet để tải thư viện vẽ đồ thị Cytoscape.js.
 
+> **Lỗi `npm.ps1 cannot be loaded because running scripts is disabled`** (PowerShell trên Windows, kể cả terminal của VS Code): PowerShell đang chặn chạy script `.ps1`, không phải lỗi của dự án. Chọn một cách:
+> - Gọi Node trực tiếp, không qua npm: `node scripts/serve.js`
+> - Hoặc gọi bản `.cmd` của npm: `npm.cmd start`
+> - Hoặc đổi terminal của VS Code sang **Command Prompt** (mũi tên ∨ cạnh dấu `+` → *Command Prompt*), rồi chạy `npm start` như thường.
+> - Hoặc cho phép script cho riêng tài khoản của bạn (tự chạy một lần trong PowerShell): `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
+>
+> Dự án không có thư viện ngoài nên **không cần `npm install`**.
+
 Cách khác, nếu không muốn dùng Node:
 - VS Code: cài extension **Live Server**, chuột phải `1_SourceCode/index.html` → *Open with Live Server*.
 - Python: `cd 1_SourceCode` rồi `python -m http.server 8080`.

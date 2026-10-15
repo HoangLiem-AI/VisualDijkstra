@@ -155,6 +155,28 @@ Nguyên tắc ghi:
 - **Kiểm chứng của SV:** _(...)_
 - **Commit / ảnh chụp:** "Giao diện web mô phỏng từng bước Dijkstra (heap)"
 
+### #9 — 15/10/2026 — Lỗi npm bị PowerShell chặn khi chạy trong VS Code
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** kiểm thử / tài liệu.
+- **Prompt (nguyên văn):**
+  > chạy trên visual code bị:
+  >
+  > npm : File C:\Program Files
+odejs
+pm.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=135170.
+  > At line:1 char:1
+  > + npm install
+  > + ~~~
+  >     + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+  >     + FullyQualifiedErrorId : UnauthorizedAccess
+- **Kết quả AI trả về (tóm tắt):**
+  - Nguyên nhân: Execution Policy mặc định của PowerShell trên Windows chặn file `npm.ps1`; không phải lỗi code. Dự án không có thư viện ngoài nên không cần `npm install`.
+  - Cách xử lý: chạy `node scripts/serve.js` (không qua npm), hoặc `npm.cmd start`, hoặc đổi terminal VS Code sang Command Prompt, hoặc SV tự chạy `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. AI không tự đổi Execution Policy vì đó là thiết lập bảo mật của máy.
+  - Thêm ghi chú xử lý lỗi này vào README mục 2.
+- **File tạo / sửa:** `README.md`, `DEVLOG.md`.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "README: hướng dẫn xử lý lỗi PowerShell chặn npm"
+
 ---
 
 ## Nhật ký lỗi
@@ -162,6 +184,7 @@ Nguyên tắc ghi:
 | # | Ngày | Mô tả lỗi | Phát hiện bằng | Nguyên nhân | Cách sửa | Commit |
 |---|---|---|---|---|---|---|
 | 1 | 14/10 | Đồ thị mẫu 6 đỉnh không sinh bước relax-fail "v đã chốt" như comment khẳng định | Chạy `demo-trace.js`, đọc trace | Chọn cạnh chưa đủ | Thêm cạnh `6 4 1` | (commit #4) |
+| 2 | 15/10 | `npm start` / `npm install` báo "npm.ps1 cannot be loaded because running scripts is disabled" trong terminal VS Code | SV chạy thử trên máy | PowerShell Execution Policy chặn `npm.ps1` (môi trường, không phải lỗi code) | Dùng `node scripts/serve.js` hoặc `npm.cmd start`; ghi hướng dẫn vào README | (commit #9) |
 
 ## Các quyết định thiết kế
 
