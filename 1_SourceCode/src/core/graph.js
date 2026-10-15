@@ -33,6 +33,25 @@ export function createGraph(n, edges, { directed = true } = {}) {
   return { n, directed, edges: list, adj };
 }
 
+/**
+ * Hàm relax mặc định, dùng chung cho mọi thuật toán: giá trị tới v khi đi cạnh `edge` từ giá trị t.
+ * Tách riêng để sau này thay bằng "giờ đến sớm nhất theo lịch chuyến".
+ */
+export function defaultRelax(edge, t) {
+  return t + edge.w;
+}
+
+/** In khoảng cách: Infinity → ∞ */
+export const fmtDist = (x) => (x === Infinity ? '∞' : String(x));
+
+/** Câu tóm tắt đường đi s → t cho bước kết thúc của trace. */
+export function pathMessage(path, dist, s, t) {
+  if (t === null) return '';
+  return path
+    ? ` Đường đi ngắn nhất ${s}→${t}: ${path.join(' → ')} (độ dài ${dist[t]})`
+    : ` Không có đường đi từ ${s} tới ${t}`;
+}
+
 /** Đồ thị có cạnh trọng số âm hay không. */
 export function hasNegativeEdge(graph) {
   return graph.edges.some((e) => e.w < 0);

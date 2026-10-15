@@ -11,7 +11,7 @@ const C = {
   frontier: '#dbeafe', frontierBorder: '#3b82f6',
   finalized: '#bbf7d0', finalizedBorder: '#16a34a',
   current: '#fed7aa', currentBorder: '#ea580c',
-  edge: '#a8b0bd', tree: '#3b82f6', ok: '#16a34a', fail: '#dc2626', path: '#7c3aed',
+  edge: '#a8b0bd', tree: '#3b82f6', ok: '#16a34a', fail: '#dc2626', path: '#7c3aed', cycle: '#b91c1c',
 };
 
 const STYLE = [
@@ -49,6 +49,11 @@ const STYLE = [
   },
   { selector: 'edge.undirected', style: { 'target-arrow-shape': 'none' } },
   { selector: 'edge.tree', style: { width: 3.5, 'line-color': C.tree, 'target-arrow-color': C.tree } },
+  {
+    selector: 'edge.cycle',
+    style: { width: 7, 'line-color': C.cycle, 'target-arrow-color': C.cycle, 'z-index': 11, color: C.cycle },
+  },
+  { selector: 'node.in-cycle', style: { 'background-color': '#fecaca', 'border-color': C.cycle, 'border-width': 4 } },
   { selector: 'edge.path', style: { width: 6, 'line-color': C.path, 'target-arrow-color': C.path, 'z-index': 9 } },
   {
     selector: 'edge.relax-ok',
@@ -75,8 +80,8 @@ export class GraphRenderer {
     this.treeEdge = new Map(); // "u-v" → id cạnh nhẹ nhất từ u tới v (để tô cây đường đi)
   }
 
-  /** Vẽ đồ thị mới (chưa tô màu theo bước nào). */
-  load(graph, s, t) {
+  /** Vẽ đồ thị mới (chưa tô màu theo bước nào). layout: tên bố cục ban đầu, mặc định cây theo tầng. */
+  load(graph, s, t, layout = 'breadthfirst') {
     this.graph = graph;
     this.s = s;
     this.t = t;
@@ -107,7 +112,7 @@ export class GraphRenderer {
 
     this.cy.elements().remove();
     this.cy.add([...nodes, ...edges]);
-    this.layoutIndex = 0;
+    this.layoutIndex = Math.max(0, LAYOUTS.indexOf(layout));
     this.runLayout();
   }
 
@@ -137,7 +142,7 @@ export class GraphRenderer {
   show(step) {
     const { cy, graph } = this;
     cy.batch(() => {
-      cy.elements().removeClass('frontier finalized current tree path relax-ok relax-fail');
+      cy.elements().removeClass('frontier finalized current tree path relax-ok relax-fail cycle in-cycle');
 
       // Đỉnh: nhãn "số đỉnh / dist", màu theo trạng thái
       for (let i = 1; i <= graph.n; i++) {
@@ -165,6 +170,17 @@ export class GraphRenderer {
         }
       }
 
+      // Bellman-Ford: tô chu trình âm
+      if (step.type === 'negative-cycle' && step.cycle) {
+        const c = step.cycle;
+        for (let k = 0; k < c.length; k++) {
+          cy.getElementById(`n${c[k]}`).addClass('in-cycle');
+          const id = this.treeEdge.get(`${c[k]}-${c[(k + 1) % c.length]}`);
+          if (id !== undefined) cy.getElementById(`e${id}`).addClass('cycle');
+        }
+        return;
+      }
+
       // Cạnh đang xét
       if (step.edge) {
         const cls = step.type === 'relax-ok' ? 'relax-ok' : 'relax-fail';
@@ -176,7 +192,7 @@ export class GraphRenderer {
   /** Về trạng thái chưa chạy: mọi đỉnh ∞, không tô màu. */
   reset() {
     this.cy.batch(() => {
-      this.cy.elements().removeClass('frontier finalized current tree path relax-ok relax-fail');
+      this.cy.elements().removeClass('frontier finalized current tree path relax-ok relax-fail cycle in-cycle');
       this.cy.nodes().forEach((node) => node.data('display', `${node.id().slice(1)}\n∞`));
     });
   }

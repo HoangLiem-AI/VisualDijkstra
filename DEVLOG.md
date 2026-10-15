@@ -177,6 +177,38 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 - **Kiểm chứng của SV:** _(...)_
 - **Commit / ảnh chụp:** "README: hướng dẫn xử lý lỗi PowerShell chặn npm"
 
+### #10 — 15/10/2026 — Hỏi các phần còn lại
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** lập kế hoạch.
+- **Prompt (nguyên văn):**
+  > chúng ta còn báo cáo kịch bản demo và demo phải không?
+- **Kết quả AI trả về (tóm tắt):** liệt kê phần còn thiếu theo CLAUDE.md: mở rộng (Dijkstra mảng, Bellman-Ford, minh họa cạnh âm), bộ testcase và script kiểm thử/benchmark, report, kịch bản demo + video. Đề xuất lịch: 15/10 mở rộng → 16/10 testcase + benchmark → 17/10 report, kịch bản, quay video → 18/10 dự phòng, nộp. Không sửa file.
+- **Kiểm chứng của SV:** _(...)_
+
+### #11 — 15/10/2026 — Dijkstra mảng, Bellman-Ford, chế độ minh họa cạnh âm
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5; Chrome headless (điều khiển qua DevTools Protocol) để kiểm tra giao diện.
+- **Công đoạn:** code, kiểm thử.
+- **Prompt (nguyên văn):**
+  > có làm bước 1 luôn đi
+- **Kết quả AI trả về (tóm tắt):**
+  - `dijkstra-array.js`: Dijkstra dùng mảng, O(V² + E). Mỗi lần duyệt cả mảng dist tìm đỉnh nhỏ nhất (bằng nhau lấy đỉnh số nhỏ, cùng thứ tự với bản heap); dừng sớm khi các đỉnh còn lại đều ∞. Trường `pq` của trace là các đỉnh ứng viên. Thống kê thêm số phép so sánh để benchmark.
+  - `bellman-ford.js`: tối đa n − 1 vòng, mỗi vòng duyệt mọi cạnh theo thứ tự input (vô hướng: 2 cung), dừng sớm khi một vòng không đổi gì; thêm một lượt kiểm tra chu trình âm, nếu có thì lần theo `prev` để lấy đúng chu trình. Thêm loại bước `round`, `negative-cycle` (kèm `cycle`), trường `round`/`maxRound`. Comment có công thức truy hồi quy hoạch động.
+  - `algorithms.js`: danh mục 3 thuật toán (tên, hàm, pseudo-code, độ phức tạp, kiểu khung hàng đợi). Chuyển `defaultRelax`, `fmtDist`, `pathMessage` vào `graph.js` để dùng chung; cả 3 thuật toán đều relax qua `relax(edge, t)`.
+  - `parser.formatOutput`: có chu trình âm thì output một dòng `Phát hiện chu trình âm`.
+  - Giao diện: ô chọn thuật toán; pseudo-code + độ phức tạp đổi theo thuật toán; khung bên phải đổi giữa Hàng đợi ưu tiên / Đỉnh ứng viên / Vòng lặp i/(n−1); tô đỏ chu trình âm. Tùy chọn **Minh họa cạnh âm**: cho Dijkstra chạy dù có cạnh âm, bước cuối hiện bảng **So sánh với Bellman-Ford** tô đỏ đỉnh sai. Không bật thì báo lỗi kèm gợi ý.
+  - Thêm 2 ví dụ: "Cạnh âm: Dijkstra sai, Bellman-Ford đúng" (4 đỉnh; Dijkstra ra `0 2 5 5`, đúng là `0 1 5 4`) và "Chu trình âm" (2 → 3 → 4 → 2, tổng −1). Mỗi ví dụ có thể tự chọn thuật toán, bật minh họa, chọn bố cục.
+  - `demo-trace.js`: thêm `--thuat-toan=heap|mang|bf` và `--minh-hoa-am`. Cập nhật 2 README.
+- **File tạo / sửa:** `1_SourceCode/src/core/{dijkstra-array.js, bellman-ford.js, algorithms.js}` (mới), `src/core/{graph.js, dijkstra-heap.js, parser.js, samples.js}`, `src/ui/{app.js, panels.js, renderer.js}`, `index.html`, `style.css`, `scripts/demo-trace.js`, `README.md`, `1_SourceCode/README.md`, `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:**
+  - Kiểm tra chéo 3000 đồ thị ngẫu nhiên (n ≤ 9) với Floyd-Warshall: 3 thuật toán cho cùng dist và đường đi đúng độ dài; Bellman-Ford đúng với 387 ca có cạnh âm không chu trình âm, phát hiện đúng 566 ca chu trình âm (chu trình trả về có tổng âm thật). 0 ca sai. Script kiểm tra tạm nằm ngoài repo; ngày 16/10 sẽ làm thành `run-tests.js` chính thức.
+  - Lần kiểm tra đầu chỉ có 1 ca "cạnh âm không chu trình âm" trên 3000 ca. Nguyên nhân: bộ sinh số ngẫu nhiên LCG lấy `seed % k` dùng các bit thấp có chu kỳ rất ngắn, nên các lựa chọn ngẫu nhiên liên tiếp bị phụ thuộc nhau. Đổi sang mulberry32 thì phân bố bình thường. **Ghi nhớ cho `gen-tests.js`: dùng mulberry32, không dùng LCG `% k`.**
+  - Ví dụ chu trình âm vẽ bằng bố cục cây xếp các đỉnh thẳng hàng, các cạnh của chu trình chồng lên nhau → cho ví dụ chọn bố cục vòng tròn.
+  - Ô chọn thuật toán bị cắt chữ khi ghi kèm độ phức tạp → chỉ ghi tên, độ phức tạp chuyển lên tiêu đề khung pseudo-code.
+  - Chú thích màu "Tạm thời (trong hàng đợi)" sai với Dijkstra mảng / Bellman-Ford → đổi thành "Tạm thời (dist < ∞, chưa chốt)".
+  - Thêm favicon rỗng để console trình duyệt không báo lỗi 404.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thêm Dijkstra mảng, Bellman-Ford và chế độ minh họa cạnh âm"
+
 ---
 
 ## Nhật ký lỗi
@@ -185,6 +217,8 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 |---|---|---|---|---|---|---|
 | 1 | 14/10 | Đồ thị mẫu 6 đỉnh không sinh bước relax-fail "v đã chốt" như comment khẳng định | Chạy `demo-trace.js`, đọc trace | Chọn cạnh chưa đủ | Thêm cạnh `6 4 1` | (commit #4) |
 | 2 | 15/10 | `npm start` / `npm install` báo "npm.ps1 cannot be loaded because running scripts is disabled" trong terminal VS Code | SV chạy thử trên máy | PowerShell Execution Policy chặn `npm.ps1` (môi trường, không phải lỗi code) | Dùng `node scripts/serve.js` hoặc `npm.cmd start`; ghi hướng dẫn vào README | (commit #9) |
+| 3 | 15/10 | Kiểm tra ngẫu nhiên gần như không sinh ca "cạnh âm, không chu trình âm" (1/3000) | Đếm số ca theo loại trong script kiểm tra chéo | LCG `seed % k` dùng bit thấp chu kỳ ngắn, các lựa chọn liên tiếp phụ thuộc nhau | Đổi sang mulberry32 (387/3000) | (commit #11) |
+| 4 | 15/10 | Ví dụ chu trình âm: các cạnh của chu trình chồng lên nhau, không nhìn thấy | Chụp màn hình Chrome headless | Bố cục cây xếp đỉnh thẳng hàng | Ví dụ tự chọn bố cục vòng tròn | (commit #11) |
 
 ## Các quyết định thiết kế
 
@@ -200,3 +234,6 @@ Dòng ghi "(đề xuất)" là gợi ý của AI; SV xác nhận hoặc sửa l�
 | 14/10 | (đề xuất) Parser cho phép w âm; Dijkstra tự báo lỗi cạnh âm | Parser cấm cạnh âm | Dùng chung parser cho Bellman-Ford |
 | 15/10 | (đề xuất) Mở web qua server tĩnh tự viết `scripts/serve.js` | `npx serve` (phải tải gói); mở trực tiếp file:// (bị chặn ES modules) | Không cần cài thêm gì ngoài Node |
 | 15/10 | (đề xuất) Đồ thị ví dụ để ở `src/core/samples.js` | Mỗi nơi tự chép đồ thị | Web, script, report, video dùng đúng một đồ thị |
+| 15/10 | (đề xuất) Chu trình âm: output một dòng `Phát hiện chu trình âm` | In dist kèm cảnh báo; mã lỗi tiếng Anh | Rõ ràng, không đưa ra dist vô nghĩa |
+| 15/10 | (đề xuất) Minh họa cạnh âm bằng tùy chọn bật/tắt + bảng so sánh với Bellman-Ford ở bước cuối | Luôn cho Dijkstra chạy với cạnh âm | Mặc định vẫn an toàn (báo lỗi); khi minh họa thì thấy rõ chỗ sai |
+| 15/10 | (đề xuất) Bellman-Ford duyệt cạnh theo thứ tự input, dừng sớm khi một vòng không đổi | Duyệt theo danh sách kề; luôn chạy đủ n − 1 vòng | Trace khớp với file input, ngắn hơn khi demo |

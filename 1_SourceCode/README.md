@@ -6,6 +6,9 @@
   - `parser.js`: đọc input / ghi output, `InputError`
   - `min-heap.js`: heap nhị phân
   - `dijkstra-heap.js`: Dijkstra + min-heap (lazy deletion), trả về `{ result, trace }`
+  - `dijkstra-array.js`: Dijkstra dùng mảng, O(V² + E)
+  - `bellman-ford.js`: Bellman-Ford, O(V·E); phát hiện chu trình âm
+  - `algorithms.js`: danh mục thuật toán (tên, hàm chạy, pseudo-code, độ phức tạp)
   - `samples.js`: đồ thị ví dụ dùng chung cho web và script
 - `src/ui/` — giao diện, chỉ phát lại trace
   - `renderer.js`: vẽ đồ thị bằng Cytoscape.js, tô màu theo bước
@@ -21,13 +24,17 @@ npm start                                   # giao diện web: http://localhost:
 node scripts/demo-trace.js                  # đồ thị mẫu 6 đỉnh
 node scripts/demo-trace.js file.in          # đọc từ file
 node scripts/demo-trace.js file.in --vo-huong
+node scripts/demo-trace.js --thuat-toan=mang     # heap | mang | bf
+node scripts/demo-trace.js file.in --minh-hoa-am # cho Dijkstra chạy với cạnh âm
 ```
 
 ## Một bước trace
 ```
 { type, line, current, edge, dist, prev, finalized, pq, message }
 ```
-- `type`: `init | extract | skip-stale | relax-ok | relax-fail | done`
+- `type`: `init | extract | skip-stale | relax-ok | relax-fail | done`; Bellman-Ford thêm `round`, `negative-cycle`
+- Bellman-Ford thêm trường `round`, `maxRound`; bước `negative-cycle` có `cycle` (dãy đỉnh của chu trình)
+- Dijkstra mảng: `pq` là các đỉnh ứng viên (chưa chốt, dist < ∞); Bellman-Ford: `pq` rỗng
 - `line`: số dòng trong `PSEUDO_CODE` (từ 1)
 - `dist`, `prev`, `finalized`: mảng bản sao, chỉ số 1..n (ô 0 bỏ trống)
 - `pq`: bản sao hàng đợi, sắp tăng dần, dạng `[{ vertex, key }]`

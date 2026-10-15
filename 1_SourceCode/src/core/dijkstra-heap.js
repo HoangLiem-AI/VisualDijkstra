@@ -2,7 +2,7 @@
 // Trả về { result, trace }; giao diện chỉ phát lại trace, không chạy lại thuật toán.
 
 import { MinHeap } from './min-heap.js';
-import { GraphError, buildPath, hasNegativeEdge } from './graph.js';
+import { GraphError, buildPath, hasNegativeEdge, defaultRelax, fmtDist as fmt, pathMessage } from './graph.js';
 
 // Pseudo-code hiển thị trên giao diện. Trường `line` của mỗi bước trace là số dòng ở đây (từ 1).
 export const PSEUDO_CODE = [
@@ -18,16 +18,6 @@ export const PSEUDO_CODE = [
   '            dist[v] ← nd; prev[v] ← u; PQ.push(v, nd)',
   'return dist, prev',
 ];
-
-/**
- * Hàm relax mặc định: thời điểm (khoảng cách) đến v khi đi cạnh `edge` từ thời điểm t.
- * Tách riêng để sau này thay bằng "giờ đến sớm nhất theo lịch chuyến".
- */
-export function defaultRelax(edge, t) {
-  return t + edge.w;
-}
-
-const fmt = (x) => (x === Infinity ? '∞' : String(x));
 
 /**
  * Chạy Dijkstra (min-heap) từ đỉnh s.
@@ -129,12 +119,7 @@ export function dijkstraHeap(graph, s, options = {}) {
 
   // Dòng 11: kết thúc
   const path = t === null ? null : buildPath(prev, dist, s, t);
-  let doneMsg = 'Hàng đợi rỗng → kết thúc.';
-  if (t !== null) {
-    doneMsg += path
-      ? ` Đường đi ngắn nhất ${s}→${t}: ${path.join(' → ')} (độ dài ${dist[t]})`
-      : ` Không có đường đi từ ${s} tới ${t}`;
-  }
+  const doneMsg = 'Hàng đợi rỗng → kết thúc.' + pathMessage(path, dist, s, t);
   record('done', 11, null, null, doneMsg);
 
   return {

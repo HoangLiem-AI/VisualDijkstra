@@ -2,8 +2,9 @@
 // Thuật toán chỉ chạy trong src/core; file này không tự tính dist.
 
 import { parseInput, formatOutput, InputError } from '../core/parser.js';
-import { createGraph, GraphError } from '../core/graph.js';
-import { dijkstraHeap, PSEUDO_CODE } from '../core/dijkstra-heap.js';
+import { createGraph, GraphError, hasNegativeEdge } from '../core/graph.js';
+import { ALGORITHMS } from '../core/algorithms.js';
+import { bellmanFord } from '../core/bellman-ford.js';
 import { SAMPLES } from '../core/samples.js';
 import { GraphRenderer } from './renderer.js';
 import { Player } from './player.js';
@@ -16,6 +17,13 @@ const MAX_UI_M = 150;
 const $ = (id) => document.getElementById(id);
 
 const dom = {
+  algorithm: $('algorithm'),
+  demoNegative: $('demo-negative'),
+  complexity: $('complexity'),
+  pqTitle: $('pq-title'),
+  pqHint: $('pq-hint'),
+  compareCard: $('compare-card'),
+  compare: $('compare'),
   sample: $('sample'),
   input: $('input'),
   undirected: $('undirected'),
@@ -39,7 +47,7 @@ const dom = {
 };
 
 // Trạng thái của lần chạy hiện tại
-let state = { input: null, graph: null, trace: [], outputText: '' };
+let state = { input: null, graph: null, algo: null, trace: [], outputText: '', compare: null, layout: undefined };
 
 const renderer = new GraphRenderer($('graph'));
 const player = new Player(onStepChange);
@@ -71,18 +79,26 @@ function run() {
   }
 
   // 2. Dựng và vẽ đồ thị
+  const algo = ALGORITHMS[dom.algorithm.value];
   const graph = createGraph(input.n, input.edges, { directed: !dom.undirected.checked });
-  renderer.load(graph, input.s, input.t);
-  state = { input, graph, trace: [], outputText: '' };
+  renderer.load(graph, input.s, input.t, state.layout);
+  state = { input, graph, algo, trace: [], outputText: '', compare: null, layout: state.layout };
+  showAlgorithm(algo);
 
   // 3. Chạy thuật toán ở lõi, nhận trace
+  const allowNegative = dom.demoNegative.checked;
   try {
-    const { result, trace } = dijkstraHeap(graph, input.s, { t: input.t });
+    const { result, trace } = algo.run(graph, input.s, { t: input.t, allowNegative });
     state.trace = trace;
     state.outputText = formatOutput(result, input.t);
+
+    // Minh họa cạnh âm: chạy thêm Bellman-Ford (không cần trace) để đối chiếu
+    if (!algo.acceptsNegative && hasNegativeEdge(graph)) {
+      state.compare = { mine: result, bf: bellmanFord(graph, input.s, { t: input.t, recordTrace: false }).result };
+    }
   } catch (err) {
     if (!(err instanceof GraphError)) throw err;
-    showError(err.message);
+    showError(err.message + ' Hoặc bật "Minh họa cạnh âm" để xem Dijkstra cho kết quả sai.');
   }
 
   // 4. Phát lại từ bước đầu
@@ -95,6 +111,15 @@ function run() {
 }
 
 /* ---------- Hiển thị một bước ---------- */
+
+/** Đổi pseudo-code, độ phức tạp và tiêu đề khung hàng đợi theo thuật toán. */
+function showAlgorithm(algo) {
+  panels.renderPseudoCode(dom.pseudo, algo.pseudo);
+  dom.complexity.textContent = algo.complexity;
+  const info = panels.QUEUE_INFO[algo.queue];
+  dom.pqTitle.textContent = info.title;
+  dom.pqHint.textContent = info.hint;
+}
 
 function onStepChange(index) {
   const step = state.trace[index];
@@ -115,6 +140,7 @@ function onStepChange(index) {
     dom.stepType.hidden = true;
     dom.stepMessage.textContent = 'Chưa có bước nào để hiển thị.';
     dom.output.textContent = '';
+    dom.compareCard.hidden = true;
     return;
   }
 
@@ -122,7 +148,8 @@ function onStepChange(index) {
   renderer.show(step);
   panels.highlightLine(dom.pseudo, step.line, step.type);
   panels.renderDistTable(dom.distTable, step, input.n, input.s, input.t);
-  panels.renderQueue(dom.pq, step);
+  if (state.algo.queue === 'rounds') panels.renderRounds(dom.pq, step);
+  else panels.renderQueue(dom.pq, step);
   panels.updateLog(dom.log, index);
 
   dom.stepType.hidden = false;
@@ -139,6 +166,14 @@ function onStepChange(index) {
     ? state.outputText
     : '(Chạy tới bước cuối để xem output)';
   dom.output.classList.toggle('pending', index !== total - 1);
+
+  // Bảng so sánh với Bellman-Ford chỉ hiện ở bước cuối, để không lộ kết quả trước
+  const showCompare = state.compare !== null && index === total - 1;
+  dom.compareCard.hidden = !showCompare;
+  if (showCompare) {
+    const { mine, bf } = state.compare;
+    panels.renderCompare(dom.compare, mine, bf, input.n, state.algo.name, input.t);
+  }
 }
 
 /* ---------- Sự kiện ---------- */
@@ -147,6 +182,9 @@ function loadSample(i) {
   const sample = SAMPLES[i];
   dom.input.value = sample.text;
   dom.undirected.checked = !sample.directed;
+  if (sample.algorithm) dom.algorithm.value = sample.algorithm;
+  dom.demoNegative.checked = Boolean(sample.demoNegative);
+  state.layout = sample.layout; // bố cục gợi ý của ví dụ, giữ cho tới khi chọn ví dụ khác
   run();
 }
 
@@ -162,6 +200,12 @@ function setupEvents() {
     ...SAMPLES.map((s, i) => new Option(s.name, String(i)))
   );
   dom.sample.addEventListener('change', () => loadSample(Number(dom.sample.value)));
+
+  dom.algorithm.replaceChildren(
+    ...Object.values(ALGORITHMS).map((a) => new Option(a.name, a.id))
+  );
+  dom.algorithm.addEventListener('change', run);
+  dom.demoNegative.addEventListener('change', run);
 
   dom.run.addEventListener('click', run);
   dom.undirected.addEventListener('change', run);
@@ -206,6 +250,5 @@ function setupEvents() {
   });
 }
 
-panels.renderPseudoCode(dom.pseudo, PSEUDO_CODE);
 setupEvents();
 loadSample(0);

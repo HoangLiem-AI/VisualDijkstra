@@ -6,6 +6,8 @@
 //   ...               dist[n]
 //   um vm wm          s -> ... -> t   (chỉ khi có t; -1 nếu không có đường)
 //
+// Có chu trình âm (Bellman-Ford): output chỉ một dòng "Phát hiện chu trình âm".
+//
 // Parser chỉ kiểm tra cú pháp và ràng buộc chung. Việc cấm cạnh âm do từng
 // thuật toán tự kiểm tra (Dijkstra cấm, Bellman-Ford cho phép).
 
@@ -92,12 +94,18 @@ export function parseInput(text) {
   return { n, m, s, t, edges };
 }
 
+/** Dòng output duy nhất khi có chu trình âm tới được từ s. */
+export const NEGATIVE_CYCLE_OUTPUT = 'Phát hiện chu trình âm';
+
 /**
  * Ghi kết quả ra chuỗi output.
  * @param {{dist:number[], path:number[]|null}} result kết quả thuật toán
  * @param {number|null} t đỉnh đích (null nếu input không có t)
  */
 export function formatOutput(result, t = null) {
+  // Bellman-Ford phát hiện chu trình âm: không có đáp án khoảng cách
+  if (result.negativeCycle) return NEGATIVE_CYCLE_OUTPUT + '\n';
+
   const out = [];
   for (let i = 1; i < result.dist.length; i++) {
     out.push(result.dist[i] === Infinity ? '-1' : String(result.dist[i]));

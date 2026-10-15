@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mô phỏng Dijkstra</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
   <!-- Cytoscape.js vẽ đồ thị (cần Internet lần đầu tải trang) -->
   <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
@@ -12,7 +13,7 @@
 <body>
   <header class="topbar">
     <h1>Mô phỏng thuật toán Dijkstra</h1>
-    <span class="subtitle">CS112 · Phân tích và thiết kế thuật toán · Dijkstra dùng min-heap</span>
+    <span class="subtitle">CS112 · Phân tích và thiết kế thuật toán · Dijkstra (min-heap, mảng) và Bellman-Ford</span>
   </header>
 
   <main class="layout">
@@ -20,12 +21,18 @@
     <section class="col">
       <div class="card">
         <h2>Input</h2>
+        <label class="field">Thuật toán
+          <select id="algorithm"></select>
+        </label>
         <label class="field">Ví dụ có sẵn
           <select id="sample"></select>
         </label>
         <textarea id="input" spellcheck="false" rows="13" aria-label="Input đồ thị"></textarea>
         <p class="hint">Dòng đầu <code>n m s [t]</code>, mỗi dòng sau <code>u v w</code>. Nhấn <kbd>Ctrl</kbd>+<kbd>Enter</kbd> để chạy.</p>
         <label class="check"><input type="checkbox" id="undirected"> Đồ thị vô hướng</label>
+        <label class="check" title="Cho Dijkstra chạy dù có cạnh âm, rồi so với Bellman-Ford để thấy kết quả sai">
+          <input type="checkbox" id="demo-negative"> Minh họa cạnh âm (cho Dijkstra chạy, so với Bellman-Ford)
+        </label>
         <button id="run" class="primary">Chạy thuật toán</button>
         <div id="error" class="error" role="alert" hidden></div>
       </div>
@@ -33,6 +40,11 @@
       <div class="card">
         <h2>Output</h2>
         <pre id="output" class="output"></pre>
+      </div>
+
+      <div class="card compare-card" id="compare-card" hidden>
+        <h2>So sánh với Bellman-Ford</h2>
+        <div id="compare"></div>
       </div>
 
       <div class="card">
@@ -70,13 +82,14 @@
 
       <div class="legend">
         <span><i class="dot idle"></i>Chưa thăm (∞)</span>
-        <span><i class="dot frontier"></i>Tạm thời (trong hàng đợi)</span>
+        <span><i class="dot frontier"></i>Tạm thời (dist &lt; ∞, chưa chốt)</span>
         <span><i class="dot current"></i>Đang xét</span>
         <span><i class="dot finalized"></i>Đã chốt</span>
         <span><i class="line tree"></i>Cây prev</span>
         <span><i class="line ok"></i>Relax thành công</span>
         <span><i class="line fail"></i>Relax không cải thiện</span>
         <span><i class="line path"></i>Đường đi s → t</span>
+        <span><i class="line cycle"></i>Chu trình âm</span>
         <span><i class="dot source"></i>Nguồn s</span>
         <span><i class="dot target"></i>Đích t</span>
       </div>
@@ -85,14 +98,14 @@
     <!-- Cột phải: trạng thái thuật toán -->
     <section class="col">
       <div class="card">
-        <h2>Pseudo-code</h2>
+        <h2>Pseudo-code <small id="complexity"></small></h2>
         <ol id="pseudo" class="pseudo"></ol>
       </div>
 
       <div class="card">
-        <h2>Hàng đợi ưu tiên <small>(sắp tăng dần)</small></h2>
+        <h2 id="pq-title">Hàng đợi ưu tiên</h2>
         <div id="pq" class="pq"></div>
-        <p class="hint">Phần tử gạch ngang là bản cũ (lazy deletion), sẽ bị bỏ qua khi lấy ra.</p>
+        <p class="hint" id="pq-hint"></p>
       </div>
 
       <div class="card">

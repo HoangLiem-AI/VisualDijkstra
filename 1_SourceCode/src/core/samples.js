@@ -1,5 +1,7 @@
 // samples.js — Các đồ thị ví dụ, dùng chung cho giao diện web và script Node.
 // SAMPLES[0] là ví dụ thống nhất: dùng trong report, video demo và testcase.
+// Trường tùy chọn: algorithm (thuật toán nên chọn khi nạp ví dụ), demoNegative (bật minh họa cạnh âm),
+// layout (bố cục vẽ: breadthfirst | circle | cose).
 
 export const SAMPLES = [
   {
@@ -47,13 +49,33 @@ export const SAMPLES = [
 `,
   },
   {
-    id: 'canh-am',
-    name: 'Có cạnh âm (Dijkstra báo lỗi)',
+    id: 'canh-am-dijkstra-sai',
+    name: 'Cạnh âm: Dijkstra sai, Bellman-Ford đúng',
     directed: true,
-    text: `3 3 1 3
-1 2 5
-2 3 -4
-1 3 2
+    algorithm: 'dijkstra-heap',
+    demoNegative: true,
+    // Dijkstra chốt đỉnh 2 với dist = 2 quá sớm; đường 1 → 3 → 2 dài 5 + (−4) = 1 tốt hơn
+    // nhưng tới khi xét 3→2 thì 2 đã chốt. Kết quả đúng: dist = 0 1 5 4.
+    text: `4 4 1 4
+1 2 2
+1 3 5
+3 2 -4
+2 4 3
+`,
+  },
+  {
+    id: 'chu-trinh-am',
+    name: 'Chu trình âm (Bellman-Ford phát hiện)',
+    directed: true,
+    algorithm: 'bellman-ford',
+    layout: 'circle', // bố cục cây xếp các đỉnh thẳng hàng, che mất chu trình
+    // Chu trình 2 → 3 → 4 → 2 có tổng 1 + (−3) + 1 = −1
+    text: `5 5 1 5
+1 2 4
+2 3 1
+3 4 -3
+4 2 1
+4 5 2
 `,
   },
 ];

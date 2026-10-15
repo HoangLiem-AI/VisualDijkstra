@@ -1,6 +1,12 @@
 # Mô phỏng thuật toán Dijkstra — Bài tập lớn CS112
 
-Mô phỏng từng bước thuật toán Dijkstra (dùng min-heap) tìm đường đi ngắn nhất từ một đỉnh nguồn.
+Mô phỏng từng bước thuật toán tìm đường đi ngắn nhất từ một đỉnh nguồn, gồm 3 cài đặt:
+
+| Thuật toán | Độ phức tạp | Ghi chú |
+|---|---|---|
+| Dijkstra dùng min-heap | O((V + E) log V) | Thuật toán chính; tốt với đồ thị thưa |
+| Dijkstra dùng mảng | O(V² + E) | So sánh cấu trúc dữ liệu; tốt với đồ thị dày |
+| Bellman-Ford (quy hoạch động) | O(V · E) | Chạy được với cạnh âm, phát hiện chu trình âm |
 
 Có hai cách dùng:
 - **Giao diện web**: nhập đồ thị, xem từng bước trên hình vẽ (mục 2).
@@ -45,7 +51,15 @@ Cách khác, nếu không muốn dùng Node:
 
 ### Sử dụng
 
-1. **Nhập đồ thị** ở ô *Input* (cột trái), hoặc chọn một ví dụ có sẵn. Đánh dấu *Đồ thị vô hướng* nếu cần. Bấm **Chạy thuật toán** (hoặc `Ctrl+Enter`).
+1. **Chọn thuật toán**, rồi **nhập đồ thị** ở ô *Input* (cột trái) hoặc chọn một ví dụ có sẵn. Đánh dấu *Đồ thị vô hướng* nếu cần. Bấm **Chạy thuật toán** (hoặc `Ctrl+Enter`). Đổi thuật toán thì chạy lại ngay trên cùng đồ thị.
+
+   | Ví dụ có sẵn | Dùng để |
+   |---|---|
+   | Ví dụ 6 đỉnh (report / video) | Ví dụ chính; có đủ mọi loại bước |
+   | Đồ thị vô hướng 5 đỉnh | Thử chế độ vô hướng |
+   | Có đỉnh không tới được | Output in `-1` |
+   | Cạnh âm: Dijkstra sai, Bellman-Ford đúng | Chế độ minh họa cạnh âm (xem bên dưới) |
+   | Chu trình âm (Bellman-Ford phát hiện) | Bellman-Ford tô đỏ chu trình âm |
 2. **Xem từng bước** bằng các nút dưới đồ thị:
 
    | Nút | Phím tắt | Tác dụng |
@@ -60,9 +74,11 @@ Cách khác, nếu không muốn dùng Node:
 3. **Theo dõi** ở các khung:
    - *Đồ thị*: mỗi đỉnh ghi `số đỉnh` và `dist` hiện tại. Màu: xám = chưa thăm, xanh dương = tạm thời, cam = đang xét, xanh lá = đã chốt. Cạnh xanh lá = relax thành công, đỏ nét đứt = relax không cải thiện, xanh dương = cây `prev`, tím = đường đi ngắn nhất s → t (ở bước cuối).
    - *Pseudo-code*: dòng đang chạy được tô sáng.
-   - *Hàng đợi ưu tiên*: các phần tử trong min-heap; phần tử gạch ngang là bản cũ, sẽ bị bỏ qua khi lấy ra (lazy deletion).
+   - *Khung thứ hai ở cột phải* đổi theo thuật toán: **Hàng đợi ưu tiên** (Dijkstra heap; phần tử gạch ngang là bản cũ, sẽ bị bỏ qua khi lấy ra — lazy deletion), **Đỉnh ứng viên** (Dijkstra mảng), **Vòng lặp i / n−1** (Bellman-Ford).
    - *Bảng dist / prev*: khoảng cách và đỉnh đứng trước của từng đỉnh.
 4. **Output** hiện ở cột trái khi tới bước cuối, đúng định dạng như script console.
+
+**Chế độ minh họa cạnh âm.** Bình thường Dijkstra từ chối đồ thị có cạnh âm (báo lỗi). Đánh dấu *Minh họa cạnh âm* thì Dijkstra vẫn chạy; tới bước cuối hiện thêm khung **So sánh với Bellman-Ford**, tô đỏ các đỉnh Dijkstra tính sai. Chọn ví dụ *Cạnh âm: Dijkstra sai, Bellman-Ford đúng* để xem ngay.
 
 Giao diện chỉ mô phỏng đồ thị tối đa 30 đỉnh, 150 cạnh; đồ thị lớn hơn hãy dùng script.
 
@@ -75,6 +91,8 @@ Mọi lệnh chạy trong thư mục `1_SourceCode`:
 | Chạy đồ thị mẫu 6 đỉnh có sẵn | `node scripts/demo-trace.js` (hoặc `npm run demo`) |
 | Chạy với input từ file | `node scripts/demo-trace.js duong/dan/file.in` |
 | Coi đồ thị là vô hướng | `node scripts/demo-trace.js duong/dan/file.in --vo-huong` |
+| Chọn thuật toán | thêm `--thuat-toan=heap` (mặc định), `--thuat-toan=mang` hoặc `--thuat-toan=bf` |
+| Cho Dijkstra chạy dù có cạnh âm | thêm `--minh-hoa-am` |
 | Lưu kết quả ra file | `node scripts/demo-trace.js > ket-qua.txt` |
 
 ## 4. Định dạng input
@@ -87,7 +105,7 @@ um vm wm
 ```
 - `n`: số đỉnh (đánh số 1..n), `m`: số cạnh, `s`: đỉnh nguồn, `t`: đỉnh đích (không bắt buộc).
 - Mỗi dòng sau là một cạnh có hướng `u → v` với trọng số `w`.
-- Ràng buộc: 1 ≤ n ≤ 10^5; 0 ≤ m ≤ 2·10^5; 0 ≤ w ≤ 10^9 (Dijkstra không nhận cạnh âm).
+- Ràng buộc: 1 ≤ n ≤ 10^5; 0 ≤ m ≤ 2·10^5; |w| ≤ 10^9. Dijkstra chỉ nhận w ≥ 0; Bellman-Ford nhận cả w < 0.
 
 Ví dụ (đây chính là đồ thị mẫu, lưu thành `vi-du.in`):
 ```
@@ -128,9 +146,11 @@ Script in ra 4 phần:
    | `skip-stale` | Lấy ra phần tử cũ của đỉnh đã chốt → bỏ qua (lazy deletion) |
    | `relax-ok` | Tìm được đường ngắn hơn → cập nhật dist |
    | `relax-fail` | Không ngắn hơn, hoặc đỉnh đích đã chốt → giữ nguyên |
-   | `done` | Hàng đợi rỗng, kết thúc |
+   | `done` | Kết thúc |
+   | `round` | (Bellman-Ford) bắt đầu một vòng duyệt cạnh, hoặc dừng sớm |
+   | `negative-cycle` | (Bellman-Ford) phát hiện chu trình âm |
 3. **Thống kê**: số lần push/pop, số phần tử cũ bị bỏ qua, số lần relax.
-4. **Output**: dòng i là khoảng cách ngắn nhất tới đỉnh i (`-1` nếu không tới được). Nếu input có `t` thì thêm một dòng đường đi `s -> ... -> t` (`-1` nếu không có đường).
+4. **Output**: dòng i là khoảng cách ngắn nhất tới đỉnh i (`-1` nếu không tới được). Nếu input có `t` thì thêm một dòng đường đi `s -> ... -> t` (`-1` nếu không có đường). Nếu Bellman-Ford phát hiện chu trình âm thì output chỉ có một dòng `Phát hiện chu trình âm`.
 
 Output của ví dụ trên:
 ```
@@ -158,7 +178,8 @@ Lỗi: Đồ thị có cạnh trọng số âm: Dijkstra không đảm bảo đ�
 ```
 1_SourceCode/      mã nguồn (chi tiết kỹ thuật: 1_SourceCode/README.md)
   index.html, style.css   trang web
-  src/core/        lõi thuật toán: graph, parser, min-heap, dijkstra-heap, samples
+  src/core/        lõi thuật toán: graph, parser, min-heap, dijkstra-heap,
+                   dijkstra-array, bellman-ford, algorithms (danh mục), samples
   src/ui/          giao diện: renderer (vẽ đồ thị), player (Tiến/Lùi/Tự chạy), panels, app
   scripts/         script Node: serve.js (server tĩnh), demo-trace.js
 3_Testcase/        bộ testcase (chưa có)

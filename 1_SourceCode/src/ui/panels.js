@@ -10,6 +10,8 @@ export const TYPE_LABELS = {
   'relax-ok': 'Relax: cập nhật',
   'relax-fail': 'Relax: giữ nguyên',
   done: 'Kết thúc',
+  round: 'Vòng lặp',
+  'negative-cycle': 'Chu trình âm',
 };
 
 function el(tag, className, text) {
@@ -72,9 +74,37 @@ export function renderDistTable(table, step, n, s, t) {
   table.replaceChildren(...rows);
 }
 
-/* ---------- Hàng đợi ưu tiên ---------- */
+/* ---------- Hàng đợi ưu tiên / ứng viên / vòng lặp ---------- */
 
-/** Hiển thị các phần tử trong heap, sắp tăng dần. Phần tử cũ (lazy deletion) bị gạch ngang. */
+// Tiêu đề và chú thích của khung này, tùy thuật toán (ALGORITHMS[id].queue)
+export const QUEUE_INFO = {
+  heap: {
+    title: 'Hàng đợi ưu tiên (min-heap, sắp tăng dần)',
+    hint: 'Phần tử gạch ngang là bản cũ (lazy deletion), sẽ bị bỏ qua khi lấy ra.',
+  },
+  array: {
+    title: 'Đỉnh ứng viên (chưa chốt, dist < ∞)',
+    hint: 'Không có hàng đợi: mỗi lần chọn phải duyệt cả mảng dist, O(V), để tìm đỉnh nhỏ nhất.',
+  },
+  rounds: {
+    title: 'Vòng lặp',
+    hint: 'Mỗi vòng duyệt toàn bộ cạnh. Sau vòng i, dist[v] đúng với mọi đường đi dùng ≤ i cạnh.',
+  },
+};
+
+/** Bellman-Ford: hiển thị vòng hiện tại trên tổng n − 1 vòng. */
+export function renderRounds(container, step) {
+  const box = el('div', 'rounds');
+  const label = step.round === 0 ? 'Chưa bắt đầu vòng nào' : `Vòng ${step.round} / ${step.maxRound}`;
+  const bar = el('div', 'bar');
+  const fill = el('i');
+  fill.style.width = step.maxRound ? `${(100 * step.round) / step.maxRound}%` : '100%';
+  bar.append(fill);
+  box.append(el('span', 'round-label', label), bar);
+  container.replaceChildren(box);
+}
+
+/** Hiển thị các phần tử trong heap (hoặc các đỉnh ứng viên), sắp tăng dần. Phần tử cũ bị gạch ngang. */
 export function renderQueue(container, step) {
   if (step.pq.length === 0) {
     container.replaceChildren(el('span', 'pq-empty', '∅ rỗng'));
@@ -120,4 +150,49 @@ export function updateLog(container, index) {
   else if (li.offsetTop + li.offsetHeight > container.scrollTop + container.clientHeight) {
     container.scrollTop = li.offsetTop + li.offsetHeight - container.clientHeight;
   }
+}
+
+/* ---------- So sánh Dijkstra với Bellman-Ford (minh họa cạnh âm) ---------- */
+
+/**
+ * @param mine kết quả Dijkstra, bf kết quả Bellman-Ford (cùng đồ thị, cùng s)
+ */
+export function renderCompare(container, mine, bf, n, name, t) {
+  if (bf.negativeCycle) {
+    container.replaceChildren(
+      el('p', 'compare-summary bad',
+        `Bellman-Ford phát hiện chu trình âm (${[...bf.cycle, bf.cycle[0]].join(' → ')}): ` +
+        'không tồn tại đường đi ngắn nhất, nên mọi kết quả của Dijkstra đều vô nghĩa.')
+    );
+    return;
+  }
+
+  let wrong = 0;
+  const head = el('tr');
+  for (const h of ['Đỉnh', name, 'Bellman-Ford', '']) head.append(el('th', '', h));
+  const rows = [head];
+  for (let v = 1; v <= n; v++) {
+    const a = mine.dist[v];
+    const b = bf.dist[v];
+    const same = a === b;
+    if (!same) wrong++;
+    const tr = el('tr', same ? '' : 'diff');
+    tr.append(el('td', '', String(v)), el('td', '', fmt(a)), el('td', '', fmt(b)), el('td', '', same ? '✓' : '✗'));
+    rows.push(tr);
+  }
+
+  const summary = wrong
+    ? el('p', 'compare-summary bad', `${name} sai ở ${wrong} đỉnh.`)
+    : el('p', 'compare-summary good', `Lần này ${name} vẫn ra đúng, nhưng với cạnh âm thì không có gì đảm bảo.`);
+  const table = el('table', 'compare-table');
+  table.append(...rows);
+
+  const parts = [summary, table];
+  if (t !== null) {
+    const paths = el('div', 'compare-paths');
+    const show = (r) => (r.path ? `${r.path.join(' → ')} (${r.dist[t]})` : 'không có');
+    paths.append(el('div', '', `${name}: ${show(mine)}`), el('div', '', `Bellman-Ford: ${show(bf)}`));
+    parts.push(paths);
+  }
+  container.replaceChildren(...parts);
 }
