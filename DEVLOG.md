@@ -209,6 +209,34 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 - **Kiểm chứng của SV:** _(...)_
 - **Commit / ảnh chụp:** "Thêm Dijkstra mảng, Bellman-Ford và chế độ minh họa cạnh âm"
 
+### #12 — 17/10/2026 — Bộ testcase, script kiểm thử và benchmark
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** kiểm thử.
+- **Prompt (nguyên văn):**
+  > làm tiếp tục bước tiếp theo đi
+- **Kết quả AI trả về (tóm tắt):**
+  - `scripts/rng.js`: mulberry32 có seed (rút kinh nghiệm lỗi #3). `scripts/generators.js`: sinh đồ thị ngẫu nhiên (có tùy chọn cây khung từ s), dày, cạnh âm không chu trình, lưới.
+  - `scripts/brute-force.js`: vét cạn mọi đường đi đơn bằng DFS (n ≤ 8) và Floyd-Warshall (phát hiện chu trình âm tới được từ s). Chạy riêng được: `node scripts/brute-force.js file.in`.
+  - `scripts/gen-tests.js`: 44 test, 5 nhóm (nho 11, bien 9, dac-biet 9, lon 4, khong-hop-le 11), mỗi test một seed. Đáp án: vét cạn (n ≤ 8) / Floyd-Warshall (n ≤ 300) / Bellman-Ford (lớn); khi sinh luôn đối chiếu chéo các nguồn, lệch là dừng. Tự ghi `3_Testcase/README.md` (bảng mô tả, n/m, nguồn đáp án, seed). `nho/01-vi-du-6-dinh` chính là ví dụ thống nhất trong report/video.
+  - `src/core/solve.js`: chuỗi input → chuỗi output (như chương trình nộp chấm); lỗi trả về dòng `Lỗi: ...`. Thêm hằng `NEGATIVE_EDGE_MESSAGE`.
+  - `scripts/run-tests.js`: chạy cả 3 thuật toán trên mọi test, in bảng đạt/không đạt + thời gian, ghi `4_Report/so-lieu/ket-qua-kiem-thu.md`. Chấm dist chính xác; đường đi chấp nhận mọi đường hợp lệ có độ dài bằng dist[t] (vì có thể nhiều đường ngắn nhất); test có cạnh âm thì Dijkstra phải báo lỗi; Dijkstra mảng bỏ qua khi n > 20000.
+  - `scripts/benchmark.js`: đồ thị thưa (m = 4n, n tới 10^5) và dày (m ≈ n²/2, n tới 1000), trung vị 5 lần, kèm số phép toán; ghi `4_Report/so-lieu/benchmark.md` và `.csv`.
+  - `package.json`: thêm `test`, `gen-tests`, `bench`. README: thêm mục "Kiểm thử và benchmark".
+- **Kết quả:**
+  - `run-tests.js`: **128 đạt, 0 không đạt, 4 bỏ qua** (Dijkstra mảng trên test n ≥ 48400).
+  - Benchmark: đồ thị thưa n = 20000 — heap 31.8 ms, mảng 1513.7 ms, Bellman-Ford 163.6 ms; đồ thị dày n = 1000 (≈ 5·10^5 cạnh) — heap 97.3 ms, mảng 60.4 ms, Bellman-Ford 550.4 ms. Đúng lý thuyết: heap thắng ở đồ thị thưa, mảng O(V²) thắng ở đồ thị dày (từ n ≈ 400).
+  - Test độ chính xác số lớn: chuỗi 10^5 đỉnh w = 10^9 cho dist cuối 99 999 000 000 000 đúng (< 2^53).
+- **File tạo / sửa:** `1_SourceCode/scripts/{rng.js, generators.js, brute-force.js, gen-tests.js, run-tests.js, benchmark.js}` (mới), `1_SourceCode/src/core/solve.js` (mới), `src/core/{graph.js, dijkstra-heap.js, dijkstra-array.js}`, `1_SourceCode/package.json`, `3_Testcase/**` (88 file + README), `4_Report/so-lieu/{ket-qua-kiem-thu.md, benchmark.md, benchmark.csv}`, `README.md`, `1_SourceCode/README.md`, `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:**
+  - **Kiểm tra bộ test có bắt được lỗi không** (mutation test): cố ý xóa dòng so sánh với con phải trong `siftDown` của min-heap rồi chạy `run-tests.js` → 5 test không đạt, đều ở bản heap (`dac-biet/06-day-du`, `dac-biet/09-nhieu-phan-tu-cu`, 3 test `lon`). Đáng chú ý: **11 test nhỏ ngẫu nhiên không phát hiện được lỗi này** → cần cả nhóm đặc biệt và lớn. Đã khôi phục code, chạy lại 128/128 đạt.
+  - Đường đi ngắn nhất không duy nhất (ví dụ test lưới mọi trọng số 1): so khớp chuỗi sẽ đánh trượt oan → viết bộ chấm kiểm tra tính hợp lệ và độ dài đường đi.
+  - Đáp án cho đồ thị 10^5 đỉnh: vét cạn và Floyd-Warshall không chạy nổi → dùng Bellman-Ford có dừng sớm (độc lập với Dijkstra), chạy 0.3–6 giây; `run-tests.js` đối chiếu lại với Dijkstra heap.
+  - Lịch bị trễ: theo kế hoạch #10 bước này làm ngày 16/10, thực tế làm ngày 17/10.
+  - Thư mục `3_Testcase/lon` khoảng 18 MB (4 test lớn); vẫn dưới giới hạn 100 MB/file của GitHub.
+  - Benchmark đồ thị thưa dùng m = 4n, tới 4·10^5 cạnh, vượt ràng buộc input m ≤ 2·10^5; chỉ để đo xu hướng, không phải testcase.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thêm bộ testcase, script kiểm thử và benchmark"
+
 ---
 
 ## Nhật ký lỗi
@@ -237,3 +265,6 @@ Dòng ghi "(đề xuất)" là gợi ý của AI; SV xác nhận hoặc sửa l�
 | 15/10 | (đề xuất) Chu trình âm: output một dòng `Phát hiện chu trình âm` | In dist kèm cảnh báo; mã lỗi tiếng Anh | Rõ ràng, không đưa ra dist vô nghĩa |
 | 15/10 | (đề xuất) Minh họa cạnh âm bằng tùy chọn bật/tắt + bảng so sánh với Bellman-Ford ở bước cuối | Luôn cho Dijkstra chạy với cạnh âm | Mặc định vẫn an toàn (báo lỗi); khi minh họa thì thấy rõ chỗ sai |
 | 15/10 | (đề xuất) Bellman-Ford duyệt cạnh theo thứ tự input, dừng sớm khi một vòng không đổi | Duyệt theo danh sách kề; luôn chạy đủ n − 1 vòng | Trace khớp với file input, ngắn hơn khi demo |
+| 17/10 | (đề xuất) Chấm đường đi bằng kiểm tra hợp lệ + độ dài, không so chuỗi | So khớp chuỗi với `.out` | Có thể có nhiều đường ngắn nhất bằng nhau |
+| 17/10 | (đề xuất) Đáp án test lớn bằng Bellman-Ford có dừng sớm | Dùng Dijkstra làm đáp án | Nguồn đáp án độc lập với thuật toán đang kiểm tra |
+| 17/10 | (đề xuất) Test có cạnh âm: Dijkstra đạt khi báo đúng lỗi cạnh âm | Bỏ qua Dijkstra trên các test này | Kiểm tra luôn yêu cầu "báo lỗi rõ ràng, không crash" |

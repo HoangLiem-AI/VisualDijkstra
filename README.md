@@ -95,7 +95,23 @@ Mọi lệnh chạy trong thư mục `1_SourceCode`:
 | Cho Dijkstra chạy dù có cạnh âm | thêm `--minh-hoa-am` |
 | Lưu kết quả ra file | `node scripts/demo-trace.js > ket-qua.txt` |
 
-## 4. Định dạng input
+## 4. Kiểm thử và benchmark
+
+Trong thư mục `1_SourceCode`:
+
+| Việc | Lệnh | Kết quả |
+|---|---|---|
+| Chạy toàn bộ testcase với cả 3 thuật toán | `node scripts/run-tests.js` | Bảng đạt/không đạt + thời gian; ghi `4_Report/so-lieu/ket-qua-kiem-thu.md` |
+| Chỉ chạy một số nhóm | `node scripts/run-tests.js nho dac-biet` | |
+| Sinh lại bộ testcase (có seed, ra y hệt) | `node scripts/gen-tests.js` | `3_Testcase/<nhóm>/*.in, *.out` và `3_Testcase/README.md` |
+| Đo thời gian (đồ thị thưa / dày) | `node scripts/benchmark.js` | `4_Report/so-lieu/benchmark.md`, `benchmark.csv` (khoảng 20 giây) |
+| Đáp án vét cạn / Floyd-Warshall cho một file | `node scripts/brute-force.js file.in` | |
+
+(Hoặc `npm test`, `npm run gen-tests`, `npm run bench` nếu npm không bị PowerShell chặn.)
+
+Bộ test gồm 44 test chia 5 nhóm: `nho`, `bien`, `dac-biet`, `lon`, `khong-hop-le`. Danh sách và mô tả từng test: [3_Testcase/README.md](3_Testcase/README.md). Đáp án lấy từ vét cạn (n ≤ 8), Floyd-Warshall (n ≤ 300) hoặc Bellman-Ford (đồ thị lớn), luôn đối chiếu chéo khi sinh.
+
+## 5. Định dạng input
 
 ```
 n m s [t]
@@ -123,7 +139,7 @@ Ví dụ (đây chính là đồ thị mẫu, lưu thành `vi-du.in`):
 6 4 1
 ```
 
-## 5. Đọc kết quả của script console
+## 6. Đọc kết quả của script console
 
 Script in ra 4 phần:
 
@@ -163,7 +179,7 @@ Output của ví dụ trên:
 1 -> 3 -> 2 -> 4 -> 5 -> 6
 ```
 
-## 6. Khi input sai
+## 7. Khi input sai
 
 Chương trình không crash mà báo lỗi kèm số dòng (giao diện web hiện khung đỏ dưới nút *Chạy*, script in `Lỗi: ...`), ví dụ:
 ```
@@ -173,7 +189,7 @@ Lỗi: khai báo m = 3 cạnh nhưng chỉ có 1 dòng cạnh
 Lỗi: Đồ thị có cạnh trọng số âm: Dijkstra không đảm bảo đúng. Hãy dùng Bellman-Ford.
 ```
 
-## 7. Cấu trúc thư mục
+## 8. Cấu trúc thư mục
 
 ```
 1_SourceCode/      mã nguồn (chi tiết kỹ thuật: 1_SourceCode/README.md)
@@ -181,9 +197,11 @@ Lỗi: Đồ thị có cạnh trọng số âm: Dijkstra không đảm bảo đ�
   src/core/        lõi thuật toán: graph, parser, min-heap, dijkstra-heap,
                    dijkstra-array, bellman-ford, algorithms (danh mục), samples
   src/ui/          giao diện: renderer (vẽ đồ thị), player (Tiến/Lùi/Tự chạy), panels, app
-  scripts/         script Node: serve.js (server tĩnh), demo-trace.js
-3_Testcase/        bộ testcase (chưa có)
-4_Report/          báo cáo
+  scripts/         script Node: serve.js (server tĩnh), demo-trace.js,
+                   gen-tests.js, run-tests.js, brute-force.js, benchmark.js
+                   (+ rng.js: số ngẫu nhiên có seed, generators.js: sinh đồ thị)
+3_Testcase/        bộ testcase: nho, bien, dac-biet, lon, khong-hop-le (.in + .out)
+4_Report/          báo cáo; so-lieu/ chứa kết quả kiểm thử và benchmark
 CLAUDE.md          quy ước dự án cho Claude Code
 DEVLOG.md          nhật ký phát triển
 ```

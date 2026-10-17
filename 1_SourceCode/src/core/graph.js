@@ -2,6 +2,10 @@
 // Đỉnh đánh số 1..n; các mảng có kích thước n + 1, ô số 0 bỏ trống.
 // Không dùng DOM: chạy được cả trên trình duyệt lẫn Node.
 
+/** Thông báo khi chạy Dijkstra trên đồ thị có cạnh âm (script kiểm thử dùng để so khớp). */
+export const NEGATIVE_EDGE_MESSAGE =
+  'Đồ thị có cạnh trọng số âm: Dijkstra không đảm bảo đúng. Hãy dùng Bellman-Ford.';
+
 /** Lỗi do đồ thị không thỏa điều kiện của thuật toán (ví dụ cạnh âm với Dijkstra). */
 export class GraphError extends Error {
   constructor(code, message) {

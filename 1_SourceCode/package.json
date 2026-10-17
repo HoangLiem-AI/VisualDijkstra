@@ -5,6 +5,9 @@
   "description": "Mô phỏng thuật toán Dijkstra — CS112",
   "scripts": {
     "start": "node scripts/serve.js",
-    "demo": "node scripts/demo-trace.js"
+    "demo": "node scripts/demo-trace.js",
+    "test": "node scripts/run-tests.js",
+    "gen-tests": "node scripts/gen-tests.js",
+    "bench": "node scripts/benchmark.js"
   }
 }

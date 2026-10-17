@@ -2,7 +2,9 @@
 // Trả về { result, trace }; giao diện chỉ phát lại trace, không chạy lại thuật toán.
 
 import { MinHeap } from './min-heap.js';
-import { GraphError, buildPath, hasNegativeEdge, defaultRelax, fmtDist as fmt, pathMessage } from './graph.js';
+import {
+  GraphError, NEGATIVE_EDGE_MESSAGE, buildPath, hasNegativeEdge, defaultRelax, fmtDist as fmt, pathMessage,
+} from './graph.js';
 
 // Pseudo-code hiển thị trên giao diện. Trường `line` của mỗi bước trace là số dòng ở đây (từ 1).
 export const PSEUDO_CODE = [
@@ -36,10 +38,7 @@ export function dijkstraHeap(graph, s, options = {}) {
   const n = graph.n;
 
   if (!allowNegative && hasNegativeEdge(graph)) {
-    throw new GraphError(
-      'NEGATIVE_EDGE',
-      'Đồ thị có cạnh trọng số âm: Dijkstra không đảm bảo đúng. Hãy dùng Bellman-Ford.'
-    );
+    throw new GraphError('NEGATIVE_EDGE', NEGATIVE_EDGE_MESSAGE);
   }
 
   const dist = new Array(n + 1).fill(Infinity);

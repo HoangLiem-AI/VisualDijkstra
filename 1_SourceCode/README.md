@@ -10,12 +10,16 @@
   - `bellman-ford.js`: Bellman-Ford, O(V·E); phát hiện chu trình âm
   - `algorithms.js`: danh mục thuật toán (tên, hàm chạy, pseudo-code, độ phức tạp)
   - `samples.js`: đồ thị ví dụ dùng chung cho web và script
+  - `solve.js`: chuỗi input → chuỗi output (như chương trình nộp chấm), dùng cho kiểm thử
 - `src/ui/` — giao diện, chỉ phát lại trace
   - `renderer.js`: vẽ đồ thị bằng Cytoscape.js, tô màu theo bước
   - `player.js`: Tiến / Lùi / Tự chạy (không đụng DOM)
   - `panels.js`: pseudo-code, bảng dist/prev, hàng đợi, nhật ký
   - `app.js`: nối input → lõi → player → các khung hiển thị
-- `scripts/` — script Node: `serve.js` (server tĩnh), `demo-trace.js`
+- `scripts/` — script Node:
+  - `serve.js` (server tĩnh), `demo-trace.js` (in trace)
+  - `gen-tests.js` (sinh testcase có seed), `run-tests.js` (chấm 3 thuật toán), `brute-force.js` (vét cạn, Floyd-Warshall)
+  - `benchmark.js` (đo thời gian), `rng.js` (mulberry32), `generators.js` (sinh đồ thị)
 
 ## Chạy (cần Node.js ≥ 18)
 ```
@@ -26,6 +30,9 @@ node scripts/demo-trace.js file.in          # đọc từ file
 node scripts/demo-trace.js file.in --vo-huong
 node scripts/demo-trace.js --thuat-toan=mang     # heap | mang | bf
 node scripts/demo-trace.js file.in --minh-hoa-am # cho Dijkstra chạy với cạnh âm
+node scripts/run-tests.js                   # chấm toàn bộ 3_Testcase
+node scripts/gen-tests.js                   # sinh lại 3_Testcase
+node scripts/benchmark.js                   # đo thời gian, ghi 4_Report/so-lieu/
 ```
 
 ## Một bước trace
