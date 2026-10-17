@@ -237,6 +237,20 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 - **Kiểm chứng của SV:** _(...)_
 - **Commit / ảnh chụp:** "Thêm bộ testcase, script kiểm thử và benchmark"
 
+### #13 — 17/10/2026 — Kịch bản video demo
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** video demo.
+- **Prompt (nguyên văn):**
+  > soạn giúp tôi kịch bản demo đi, hướng dẫn step by step, để tôi vừa quay màn hình vừa nói
+- **Kết quả AI trả về (tóm tắt):**
+  - Tạo `2_VideoDemo/kich-ban-demo.md`: checklist chuẩn bị, 8 cảnh (~8–10 phút), mỗi cảnh ghi thao tác cần bấm và lời nói gợi ý; cảnh chính đi từng bước trên ví dụ 6 đỉnh (thống nhất với report và `3_Testcase/nho/01`), nhấn mạnh bước 6 (relax 3→2 cải thiện 4 → 3), bước 12 (bỏ qua phần tử cũ — lazy deletion), bước 21 (bỏ qua đỉnh đã chốt), bước 23 (đường đi 1→3→2→4→5→6 dài 13).
+  - Các cảnh còn lại: sửa input (đổi `3 2 2` thành `3 2 5` → đường mới 1→3→5→6 dài 14) và input sai; Dijkstra mảng (19 bước) và Bellman-Ford (dừng sớm ở vòng 2); cạnh âm (Dijkstra sai ở đỉnh 2 và 4); chu trình âm; chạy `run-tests.js` và đọc benchmark; kết và hướng phát triển. Cuối file có checklist sau khi quay.
+  - Số bước và nội dung trong kịch bản lấy từ trace thật do lõi sinh ra, không viết tay; biến thể `3 2 5` đã chạy thử để xác nhận output.
+- **File tạo / sửa:** `2_VideoDemo/kich-ban-demo.md` (mới), `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:** lệnh lấy trace bị treo do một lệnh `cat` thừa chờ dữ liệu vào → dừng tác vụ, ghi script ra file rồi chạy lại.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thêm kịch bản video demo"
+
 ---
 
 ## Nhật ký lỗi
