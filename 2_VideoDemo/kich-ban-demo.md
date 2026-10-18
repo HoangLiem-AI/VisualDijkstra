@@ -53,6 +53,7 @@ Cách đọc kịch bản:
 
 **🎙 Lời nói:**
 > Xin chào, em là … , mã số sinh viên … . Đây là demo đồ án môn CS112: mô phỏng thuật toán Dijkstra tìm đường đi ngắn nhất từ một đỉnh nguồn.
+> Em chọn Dijkstra vì em làm công ty vận chuyển hàng hóa và em đã áp dụng thuật toán này để tìm đường đi ngắn nhất từ điểm này đến điểm khác trên ma trận kho cả nước.
 >
 > Giao diện có ba phần.
 > - Cột trái là **input**: chọn thuật toán, nhập đồ thị, và **output** khi chạy xong.
@@ -60,6 +61,8 @@ Cách đọc kịch bản:
 > - Cột phải là **trạng thái bên trong thuật toán**: pseudo-code với dòng đang chạy được tô sáng, hàng đợi ưu tiên, và bảng dist / prev.
 >
 > Định dạng input giống bài trên Wecode: dòng đầu là `n m s t` (số đỉnh, số cạnh, đỉnh nguồn, đỉnh đích), mỗi dòng sau là một cạnh có hướng `u v w`. Ví dụ này có 6 đỉnh, 11 cạnh, đi từ đỉnh 1 tới đỉnh 6.
+>
+> Khi nói về độ phức tạp, em ký hiệu **V là số đỉnh, E là số cạnh**, tức là n và m ở dòng đầu input. Với ví dụ này V = 6, E = 11.
 
 ---
 
@@ -68,7 +71,7 @@ Cách đọc kịch bản:
 **🎙 Mở đầu:**
 > Ý tưởng của Dijkstra là **tham lam**: mỗi lần lấy ra đỉnh chưa chốt có khoảng cách nhỏ nhất, chốt nó lại, rồi thử cải thiện (relax) các đỉnh kề. Để lấy nhanh đỉnh nhỏ nhất, em dùng **min-heap**.
 >
-> Màu trên đồ thị: xám là chưa thăm, xanh dương là đã có khoảng cách tạm thời, cam là đỉnh đang xét, xanh lá là đã chốt.
+> Màu trên đồ thị: xám là chưa thăm, xanh dương là đã có khoảng cách tạm th ời, cam là đỉnh đang xét, xanh lá là đã chốt.
 
 | Bước | ▶ Thao tác | 🎙 Lời nói |
 |---|---|---|
@@ -116,12 +119,12 @@ Cách đọc kịch bản:
 **▶ Thao tác 1:** Ô *Thuật toán* → **Dijkstra (mảng)**. Bấm `→` vài lần, rồi `End`.
 
 **🎙 Lời nói:**
-> Đây là cùng thuật toán Dijkstra nhưng **không dùng heap**: mỗi lần chọn đỉnh nhỏ nhất phải duyệt cả mảng dist, tốn O(V). Tổng độ phức tạp O(V²). Khung bên phải giờ hiện các **đỉnh ứng viên** thay cho hàng đợi. Không có phần tử cũ nên chỉ còn 19 bước. Kết quả vẫn là 13.
+> Đây là cùng thuật toán Dijkstra nhưng **không dùng heap**: mỗi lần chọn đỉnh nhỏ nhất phải duyệt cả mảng dist, tốn O(V), với V là số đỉnh. Tổng độ phức tạp O(V²). Khung bên phải giờ hiện các **đỉnh ứng viên** thay cho hàng đợi. Không có phần tử cũ nên chỉ còn 19 bước. Kết quả vẫn là 13.
 
 **▶ Thao tác 2:** Ô *Thuật toán* → **Bellman-Ford**. Bấm `→` qua bước 2 (chỉ thanh "Vòng 1 / 5"), bấm **▶ Tự chạy**, tạm dừng ở **bước 14** (Vòng 2), rồi `End`.
 
 **🎙 Lời nói:**
-> Bellman-Ford là thuật toán **quy hoạch động**. Sau vòng thứ i, dist[v] là đường ngắn nhất dùng tối đa i cạnh. Vì vậy cần tối đa n − 1 vòng, mỗi vòng duyệt **tất cả** các cạnh, độ phức tạp O(V·E).
+> Bellman-Ford là thuật toán **quy hoạch động**. Sau vòng thứ i, dist[v] là đường ngắn nhất dùng tối đa i cạnh. Đường ngắn nhất không đi lại đỉnh nào nên có tối đa V − 1 cạnh. Vì vậy cần tối đa **V − 1 vòng**, ở đây là 5 vòng. Mỗi vòng duyệt **tất cả E cạnh**, nên độ phức tạp là **O(V·E)**.
 >
 > Ở ví dụ này, ngay vòng 1 đã ra đủ khoảng cách. Sang vòng 2 không cạnh nào cải thiện được, nên thuật toán **dừng sớm** mà không cần chạy đủ 5 vòng. Kết quả vẫn là 13, khớp với Dijkstra.
 
@@ -157,7 +160,7 @@ Cách đọc kịch bản:
 **▶ Thao tác:** Ô *Ví dụ có sẵn* → **Chu trình âm (Bellman-Ford phát hiện)**. Nhấn `End`.
 
 **🎙 Lời nói:**
-> Nếu có chu trình tổng âm, ví dụ 2 → 3 → 4 → 2 có tổng 1 − 3 + 1 = −1, thì đi vòng mãi sẽ càng ngắn, nên **không tồn tại** đường đi ngắn nhất. Bellman-Ford phát hiện điều này: sau n − 1 vòng mà vẫn còn cạnh relax được thì có chu trình âm. Chu trình được tô đỏ, và output báo "Phát hiện chu trình âm".
+> Nếu có chu trình tổng âm, ví dụ 2 → 3 → 4 → 2 có tổng 1 − 3 + 1 = −1, thì đi vòng mãi sẽ càng ngắn, nên **không tồn tại** đường đi ngắn nhất. Bellman-Ford phát hiện điều này: sau V − 1 vòng mà vẫn còn cạnh relax được thì có chu trình âm. Chu trình được tô đỏ, và output báo "Phát hiện chu trình âm".
 
 ---
 
