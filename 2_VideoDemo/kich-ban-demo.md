@@ -42,7 +42,7 @@ Cách đọc kịch bản:
 | 4 | So sánh Dijkstra mảng và Bellman-Ford trên cùng đồ thị | 1,5 phút |
 | 5 | Cạnh âm: Dijkstra sai, Bellman-Ford đúng | 1,5 phút |
 | 6 | Chu trình âm | 0,5 phút |
-| 7 | Bộ testcase và benchmark | 1,5 phút |
+| 7 | Bộ testcase (có test mạng bưu chính) và benchmark | 1,5 phút |
 | 8 | Kết | 0,5 phút |
 
 ---
@@ -166,30 +166,19 @@ Cách đọc kịch bản:
 
 ## Cảnh 7 — Testcase và benchmark (≈ 1,5 phút)
 
-**▶ Thao tác 1:** Chuyển sang VS Code, mở Explorer thư mục `3_Testcase`, mở `3_Testcase/README.md` ở chế độ Preview.
+Chuẩn bị sẵn 4 thứ để chuyển qua lại nhanh: `3_Testcase/README.md` (Preview), file `3_Testcase/dac-biet/10-mang-buu-chinh.out`, terminal ở `1_SourceCode`, `4_Report/so-lieu/benchmark.md` (Preview).
 
-**🎙 Lời nói:**
-> Bộ testcase có **44 test, chia 5 nhóm**: nhỏ, biên, đặc biệt, lớn và input không hợp lệ. Test đầu tiên của nhóm nhỏ chính là ví dụ 6 đỉnh vừa demo.
->
-> Đáp án được tính bằng các thuật toán độc lập: **vét cạn** cho đồ thị tối đa 8 đỉnh, **Floyd-Warshall** cho đồ thị vừa, Bellman-Ford cho đồ thị lớn. Các nguồn này được đối chiếu chéo với nhau. Mọi test sinh bằng script có seed nên tạo lại được y hệt.
+| # | ▶ Show trên màn hình | 🎙 Nói |
+|---|---|---|
+| 1 | `3_Testcase/README.md`: chỉ bảng, dòng đầu `nho / 01-vi-du-6-dinh` | "Bộ test có **45 test, 5 nhóm**: nhỏ, biên, đặc biệt, lớn, input sai. Test đầu tiên chính là ví dụ 6 đỉnh vừa demo." |
+| 2 | Chỉ cột **Nguồn đáp án** và cột **Seed** | "Đáp án tính bằng thuật toán khác: vét cạn, Floyd-Warshall, Bellman-Ford. Test sinh có seed nên tạo lại được." |
+| 3 | Chỉ dòng `dac-biet / 10-mang-buu-chinh` (cột n / m: `1250 / 2978`) | "Em bổ sung một test sát thực tế: **mạng bưu chính 1250 điểm**. Ba trung tâm khai thác Hà Nội, Đà Nẵng, TP.HCM và 63 trung tâm tỉnh nối với nhau rất dày; còn 1184 bưu cục chỉ nối về trung tâm, không nối với nhau, nên rất thưa." |
+| 4 | Mở `10-mang-buu-chinh.out`, nhấn `Ctrl+End`, chỉ dòng cuối `67 -> 14 -> 1 -> 3 -> 55 -> 171` | "Gửi hàng từ một bưu cục miền Bắc vào bưu cục xa nhất miền Nam: đi **bưu cục → trung tâm tỉnh → Hà Nội → TP.HCM → trung tâm tỉnh → bưu cục**, mất **560 phút**. Đúng cách hàng thật đi qua các trung tâm khai thác." |
+| 5 | Terminal: gõ `node scripts/run-tests.js`, chờ ~15 giây, chỉ dòng `Đạt: 131   Không đạt: 0` | "Chạy cả 3 thuật toán trên toàn bộ test: **131 lượt đạt, 0 lỗi**." |
+| 6 | `benchmark.md`: chỉ dòng **n = 20000** ở bảng *Đồ thị thưa* (31.8 ms / 1513.7 ms) | "Đồ thị thưa: heap nhanh hơn hẳn, khoảng **32 ms so với 1,5 giây** của bản mảng." |
+| 7 | Cuộn xuống bảng *Đồ thị dày*, chỉ dòng **n = 1000** (97.3 ms / 60.4 ms) | "Đồ thị dày thì ngược lại, bản mảng O(V²) nhanh hơn. Đúng như phân tích độ phức tạp." |
 
-**▶ Thao tác 2:** Ở terminal thứ hai, chạy:
-```
-node scripts/run-tests.js
-```
-Chờ chạy xong (khoảng 15 giây), cuộn tới dòng tổng kết.
-
-**🎙 Lời nói:**
-> Script chạy **cả 3 thuật toán** trên toàn bộ test. Kết quả: **128 lượt đạt, 0 không đạt**. Dijkstra mảng được bỏ qua ở các đồ thị 10^5 đỉnh vì O(V²) quá chậm. Với test có cạnh âm, Dijkstra được tính là đạt khi báo lỗi đúng.
->
-> Để chắc bộ test thực sự bắt được lỗi, em đã thử cố ý cài một lỗi vào heap. Kết quả có 5 test báo sai, toàn bộ nằm ở nhóm đặc biệt và nhóm lớn.
-
-**▶ Thao tác 3:** Mở `4_Report/so-lieu/benchmark.md` (Preview).
-
-**🎙 Lời nói:**
-> Cuối cùng là đo thời gian. Với **đồ thị thưa**, bản heap nhanh hơn hẳn: ở 20 nghìn đỉnh, heap mất khoảng 32 mili giây, còn bản mảng mất hơn 1,5 giây. Với **đồ thị dày** thì ngược lại: ở 1000 đỉnh và khoảng nửa triệu cạnh, bản mảng O(V²) nhanh hơn heap. Kết quả này khớp với phân tích độ phức tạp: O((V + E) log V) so với O(V²).
-
-*(Số liệu chính xác lấy theo file benchmark.md trên máy; nếu chạy lại, số sẽ hơi khác.)*
+*(Nếu chạy lại benchmark thì số sẽ hơi khác; đọc theo file trên máy lúc quay.)*
 
 ---
 
@@ -198,7 +187,7 @@ Chờ chạy xong (khoảng 15 giây), cuộn tới dòng tổng kết.
 **▶ Thao tác:** Quay lại trình duyệt, chọn lại *Ví dụ 6 đỉnh*, nhấn `End` để hiện đường đi tím.
 
 **🎙 Lời nói:**
-> Tóm lại, sản phẩm gồm: mô phỏng từng bước Dijkstra dùng min-heap; so sánh với bản dùng mảng và Bellman-Ford; minh họa trường hợp cạnh âm; cùng bộ 44 testcase và benchmark.
+> Tóm lại, sản phẩm gồm: mô phỏng từng bước Dijkstra dùng min-heap; so sánh với bản dùng mảng và Bellman-Ford; minh họa trường hợp cạnh âm; cùng bộ 45 testcase và benchmark.
 >
 > Hướng phát triển: thêm thuật toán A*, chạy trên bản đồ thật, và bài toán hành trình đường thư theo lịch chuyến. Hàm relax đã được tách riêng để có thể thay bằng "giờ đến sớm nhất theo lịch".
 >

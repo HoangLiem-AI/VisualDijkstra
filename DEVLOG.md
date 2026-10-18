@@ -373,6 +373,22 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 
 ---
 
+### #20 — 18/10/2026 — Cập nhật kịch bản cảnh testcase, push bản mới nhất
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** video, deploy.
+- **Prompt (nguyên văn):**
+  > chỉnh luon6bao1 cáo và push để chạy mới nhất, chỉnh file kich ban nói chỗ test case luôn
+- **Kết quả AI trả về (tóm tắt):**
+  - Report đã cập nhật ở #19 (mục 6.6, số liệu 45 test / 131 lượt đạt); kiểm tra lại không còn số liệu cũ.
+  - Kịch bản cảnh 7 viết lại thành 7 dòng "Show | Nói": thêm dòng giới thiệu test mạng bưu chính (chỉ `1250 / 2978` trong README test) và dòng mở file `.out` để chỉ hành trình `67 -> 14 -> 1 -> 3 -> 55 -> 171` (560 phút); thời lượng cảnh 7 thành 1,5 phút.
+  - Commit `kich-ban-demo.md` (SV đồng ý đưa lên bản mới nhất), không commit các file video `.mp4`. Push lên GitHub.
+- **File tạo / sửa:** `2_VideoDemo/kich-ban-demo.md`, `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:** không có.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Cập nhật kịch bản cảnh testcase"
+
+---
+
 ## Nhật ký lỗi
 
 | # | Ngày | Mô tả lỗi | Phát hiện bằng | Nguyên nhân | Cách sửa | Commit |
