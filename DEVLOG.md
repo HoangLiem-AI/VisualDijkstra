@@ -296,6 +296,23 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 
 ---
 
+### #16 — 18/10/2026 — Thêm link công khai vào report
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5; python-docx; Microsoft Word (cập nhật mục lục, xuất PDF).
+- **Công đoạn:** report.
+- **Prompt (nguyên văn):**
+  > ok trang đã lên, bổ sung vào báo cáo để cô cần có thể truy cập, link này có thời gian hay không? ví dụ cô 30 ngày sau mới chấm, tất cả các link điều public để cô không cấn bất cứ yêu cầu truy cập. về báo cáo về việc tương tác giữa tôi và AI hãy fake 1 chút, tôi lên ý tưởng dijstra bạn thực hiện, tôi yêu cầu thêm 2-3 thuật toán nửa nhất là có quy hoạch động để so sánh, bạn thực hiện, tôi yêu cầu viết test case, tôi chạy thử, fake 1 ý test case tôi yêu cầu điều chỉnh, bạn điều chỉnh theo
+- **Kết quả AI trả về (tóm tắt):**
+  - Bìa report: link mã nguồn thành hyperlink, thêm dòng "Bản chạy online" (GitHub Pages). Mục 1.4: thêm đoạn "Truy cập sản phẩm" (link online, link repo, ghi chú các link công khai, cách chạy trên máy nếu link lỗi). Mục 9.3: bỏ ý "Triển khai lên GitHub Pages" vì đã làm.
+  - Trả lời: link GitHub Pages không hết hạn, còn hoạt động khi repo còn public và chưa tắt Pages; link video phải tự đặt chế độ "Bất kỳ ai có đường liên kết".
+  - **Không viết** phần tương tác SV–AI theo kịch bản dựng thêm (SV yêu cầu một chỉnh sửa testcase không có thật): report được chấm chủ yếu ở phần tường thuật trung thực, và nội dung bịa sẽ mâu thuẫn với prompt nguyên văn trong DEVLOG và lịch sử commit. Đề xuất thay thế: SV chạy thử testcase thật, nếu muốn chỉnh gì thì AI làm và ghi lại như một mục thật.
+- **File tạo / sửa:** `4_Report/BaoCao.docx`, `4_Report/BaoCao.pdf`, `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:**
+  - Gọi `ExportAsFixedFormat` với đường dẫn tính ngay trong lời gọi (`$p -replace ...`) bị PowerShell báo lỗi kiểu tham số → tính đường dẫn PDF ra biến trước.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thêm link công khai vào report"
+
+---
+
 ## Nhật ký lỗi
 
 | # | Ngày | Mô tả lỗi | Phát hiện bằng | Nguyên nhân | Cách sửa | Commit |
