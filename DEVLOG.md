@@ -334,6 +334,22 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 
 ---
 
+### #18 — 18/10/2026 — Rút gọn cảnh testcase trong kịch bản video
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5.
+- **Công đoạn:** video.
+- **Prompt (nguyên văn):**
+  > điều chỉnh kịch bản nói ở chỗ test case ngắn gọn hơn chút, show ra những gì rồi nói những gì
+- **Kết quả AI trả về (tóm tắt):**
+  - Cảnh 7 viết lại thành bảng 5 dòng "▶ Show trên màn hình | 🎙 Nói", mỗi dòng một câu ngắn, chỉ rõ dòng/cột cần chỉ chuột (bảng test, cột nguồn đáp án và seed, dòng tổng kết `Đạt: 128   Không đạt: 0`, dòng n = 20000 của đồ thị thưa, dòng n = 1000 của đồ thị dày). Thời lượng từ 1,5 phút còn 1 phút.
+  - Bỏ khỏi lời nói: chi tiết bỏ qua Dijkstra mảng ở đồ thị lớn, cách chấm test cạnh âm, thử cài lỗi vào heap (các ý này đã có trong report).
+  - Chạy lại `run-tests.js` để chắc dòng tổng kết trên màn hình đúng như kịch bản (128 đạt, 0 không đạt, 4 bỏ qua).
+- **File tạo / sửa:** `2_VideoDemo/kich-ban-demo.md`, `DEVLOG.md` (`ket-qua-kiem-thu.md` được script ghi lại thời gian chạy).
+- **Vấn đề gặp phải và cách giải quyết:** không có.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** SV yêu cầu chưa commit `kich-ban-demo.md`; chỉ commit DEVLOG.
+
+---
+
 ## Nhật ký lỗi
 
 | # | Ngày | Mô tả lỗi | Phát hiện bằng | Nguyên nhân | Cách sửa | Commit |
