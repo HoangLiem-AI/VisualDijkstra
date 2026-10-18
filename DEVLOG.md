@@ -350,6 +350,29 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 
 ---
 
+### #19 — 18/10/2026 — Testcase mô phỏng mạng bưu chính (SV đề xuất)
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5; python-docx; Microsoft Word (xuất PDF).
+- **Công đoạn:** kiểm thử, report, video.
+- **Prompt (nguyên văn):**
+  > đây là y chỉnh sửa test case mà có thể nói nào báo cáo. thêm tôi 1 test case cho mô phỏng dữ liệu thực tế hành trình đường đi giao hàng, 1250 điểm/bưu cực/trung tâm khai thác, mật các điểm nối rất dầy ở các trung tâm khai thác (ví dụ hố chí mình, đà nẵng, hà nội) còn lại các bc sẽ không nối với nhau, khá thưa
+- **Kết quả AI trả về (tóm tắt):**
+  - `scripts/generators.js`: hàm `postalNetwork(r, n = 1250)` sinh mạng bưu chính trên bản đồ giả lập dọc 1650 km, 3 vùng. Đỉnh 1–3: TTKT vùng Hà Nội, Đà Nẵng, TP.HCM; 4–66: 63 TTKT tỉnh; 67–1250: 1184 bưu cục. Trọng số = phút di chuyển tính từ khoảng cách và tốc độ từng loại tuyến (+ phút bốc xếp). Cạnh hai chiều.
+    - Dày ở trung tâm: 3 TTKT vùng nối nhau; TTKT vùng nối mọi TTKT tỉnh trong vùng và phục vụ trực tiếp bưu cục nội thành (bậc 117–136); TTKT tỉnh nối 3 TTKT tỉnh gần nhất cùng vùng (bậc 11–31).
+    - Thưa ở bưu cục: bưu cục không nối nhau; 1069 bưu cục chỉ có 1 tuyến, 115 có thêm tuyến về TTKT gần thứ hai.
+    - s = bưu cục đầu tiên ở miền Bắc, t = bưu cục xa nhất miền Nam.
+  - `scripts/gen-tests.js`: thêm test `dac-biet/10-mang-buu-chinh` (1250 đỉnh, 2978 cạnh, seed 20261062, đáp án Bellman-Ford). Đặt **cuối danh sách** để seed của 44 test cũ không đổi (seed = BASE_SEED + vị trí); bảng README sắp lại theo nhóm. Sinh lại toàn bộ: 44 test cũ giống hệt từng byte (git không báo thay đổi).
+  - Kết quả: hành trình 67 → 14 → 1 → 3 → 55 → 171 (bưu cục → TTKT tỉnh → TTKT Hà Nội → TTKT TP.HCM → TTKT tỉnh → bưu cục), 560 phút. `run-tests.js`: **131 đạt, 0 không đạt, 4 bỏ qua**.
+  - Report: thêm mục 6.6 "Testcase mô phỏng mạng bưu chính"; cập nhật 44 → 45 test, 128 → 131 lượt đạt (mục 1.4, 6.2, 6.4, 9.1, bảng 6.1); thêm dòng #19 vào bảng dòng thời gian chương 8; xuất lại PDF (35 trang). README: 45 test. Kịch bản video cảnh 7: thêm dòng 2b giới thiệu test này, sửa số liệu.
+- **File tạo / sửa:** `1_SourceCode/scripts/{generators.js, gen-tests.js}`, `3_Testcase/README.md`, `3_Testcase/dac-biet/10-mang-buu-chinh.{in,out}`, `4_Report/{BaoCao.docx, BaoCao.pdf}`, `4_Report/so-lieu/ket-qua-kiem-thu.md`, `README.md`, `2_VideoDemo/kich-ban-demo.md` (chưa commit theo yêu cầu SV), `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:**
+  - Chèn test mới vào giữa nhóm `dac-biet` sẽ làm lệch seed của mọi test phía sau → đặt test ở cuối danh sách, đánh số vẫn là `dac-biet/10`.
+  - Floyd-Warshall với n = 1250 quá chậm (≈ 2·10⁹ phép) → đáp án lấy từ Bellman-Ford như các test lớn, `run-tests.js` đối chiếu với 2 bản Dijkstra.
+  - Mutation test ở mục 6.5 làm trên 44 test cũ, giữ nguyên số liệu đó.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thêm testcase mô phỏng mạng bưu chính"
+
+---
+
 ## Nhật ký lỗi
 
 | # | Ngày | Mô tả lỗi | Phát hiện bằng | Nguyên nhân | Cách sửa | Commit |

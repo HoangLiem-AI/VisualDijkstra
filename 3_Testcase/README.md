@@ -42,6 +42,7 @@ Kiểm tra bằng `node scripts/run-tests.js`.
 | dac-biet | 07-hinh-sao | Hình sao: s nối tới 49 đỉnh, không có cạnh khác | 50 / 49 | Floyd-Warshall (+ Bellman-Ford) | 20261044 |
 | dac-biet | 08-nhieu-duong-bang-nhau | Lưới 6×6 mọi trọng số 1: rất nhiều đường ngắn nhất bằng nhau | 36 / 120 | Floyd-Warshall (+ Bellman-Ford) | 20261045 |
 | dac-biet | 09-nhieu-phan-tu-cu | i → j (i < j) trọng số (j − i)²: dist bị cập nhật nhiều lần, nhiều phần tử cũ trong heap | 60 / 1770 | Floyd-Warshall (+ Bellman-Ford) | 20261046 |
+| dac-biet | 10-mang-buu-chinh | Mạng bưu chính 1250 điểm: 3 TTKT vùng (HN, ĐN, HCM) + 63 TTKT tỉnh nối dày; 1184 bưu cục chỉ nối TTKT, không nối nhau (thưa). w = phút di chuyển | 1250 / 2978 | Bellman-Ford | 20261062 |
 | lon | 01-thua-ngau-nhien | n = 10^5, m = 2·10^5 ngẫu nhiên, w ≤ 10^9 | 100000 / 200000 | Bellman-Ford | 20261047 |
 | lon | 02-chuoi-trong-so-max | Chuỗi 10^5 đỉnh w = 10^9 (dist tới ≈ 10^14) + 10^5 cạnh ngược | 100000 / 199998 | Bellman-Ford | 20261048 |
 | lon | 03-day | n = 450, m = 2·10^5 (gần đầy đủ) | 450 / 200000 | Bellman-Ford | 20261049 |

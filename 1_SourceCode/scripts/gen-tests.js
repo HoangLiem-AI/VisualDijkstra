@@ -17,7 +17,7 @@ import { solve } from '../src/core/solve.js';
 import { SAMPLES } from '../src/core/samples.js';
 import { makeRandom } from './rng.js';
 import { bruteForce, floydWarshall, BRUTE_MAX_N } from './brute-force.js';
-import { randomGraph, denseGraph, negativeAcyclicGraph, gridGraph, toInput } from './generators.js';
+import { randomGraph, denseGraph, negativeAcyclicGraph, gridGraph, postalNetwork, toInput } from './generators.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../3_Testcase');
 const BASE_SEED = 20261018; // seed của test thứ i là BASE_SEED + i
@@ -108,6 +108,12 @@ const TESTS = [
   { group: 'khong-hop-le', name: 'thieu-dong-canh', desc: 'Khai báo m = 3 nhưng có 2 dòng cạnh', invalid: true, build: () => '3 3 1\n1 2 1\n2 3 1\n' },
   { group: 'khong-hop-le', name: 'thua-dong-canh', desc: 'Khai báo m = 1 nhưng có 2 dòng cạnh', invalid: true, build: () => '2 1 1\n1 2 1\n2 1 1\n' },
   { group: 'khong-hop-le', name: 'm-qua-lon', desc: 'm = 200001 vượt giới hạn', invalid: true, build: () => '2 200001 1\n' },
+
+  // Thêm sau cùng để seed của các test cũ không đổi (seed = BASE_SEED + vị trí trong danh sách)
+  { group: 'dac-biet', name: 'mang-buu-chinh', desc: 'Mạng bưu chính 1250 điểm: 3 TTKT vùng (HN, ĐN, HCM) + 63 TTKT tỉnh nối dày; 1184 bưu cục chỉ nối TTKT, không nối nhau (thưa). w = phút di chuyển', build: (r) => {
+    const { n, edges, s, t } = postalNetwork(r);
+    return toInput(n, edges, s, t);
+  } },
 ];
 
 /* ---------- Tính đáp án chuẩn ---------- */
@@ -152,7 +158,7 @@ for (const g of groups) {
   for (const f of readdirSync(dir)) if (/\.(in|out)$/.test(f)) rmSync(join(dir, f));
 }
 
-const rows = [];
+const rows = Object.fromEntries(groups.map((g) => [g, []])); // bảng README xếp theo nhóm
 const counter = {};
 TESTS.forEach((test, i) => {
   counter[test.group] = (counter[test.group] || 0) + 1;
@@ -172,7 +178,7 @@ TESTS.forEach((test, i) => {
 
   const head = text.split('\n')[0].split(/\s+/);
   const nm = test.invalid ? '—' : `${head[0]} / ${head[1]}`;
-  rows.push(`| ${test.group} | ${file} | ${test.desc} | ${nm} | ${ref} | ${seed} |`);
+  rows[test.group].push(`| ${test.group} | ${file} | ${test.desc} | ${nm} | ${ref} | ${seed} |`);
   console.log(`${label.padEnd(42)} ${nm.padEnd(18)} ${ref}  (${(performance.now() - started).toFixed(0)} ms)`);
 });
 
@@ -192,7 +198,7 @@ Kiểm tra bằng \`node scripts/run-tests.js\`.
 
 | Nhóm | Test | Mô tả | n / m | Nguồn đáp án | Seed |
 |---|---|---|---|---|---|
-${rows.join('\n')}
+${groups.flatMap((g) => rows[g]).join('\n')}
 `;
 writeFileSync(join(ROOT, 'README.md'), readme);
 console.log(`\nĐã sinh ${TESTS.length} test vào ${ROOT}`);

@@ -111,7 +111,7 @@ Trong thư mục `1_SourceCode`:
 
 (Hoặc `npm test`, `npm run gen-tests`, `npm run bench` nếu npm không bị PowerShell chặn.)
 
-Bộ test gồm 44 test chia 5 nhóm: `nho`, `bien`, `dac-biet`, `lon`, `khong-hop-le`. Danh sách và mô tả từng test: [3_Testcase/README.md](3_Testcase/README.md). Đáp án lấy từ vét cạn (n ≤ 8), Floyd-Warshall (n ≤ 300) hoặc Bellman-Ford (đồ thị lớn), luôn đối chiếu chéo khi sinh.
+Bộ test gồm 45 test chia 5 nhóm: `nho`, `bien`, `dac-biet`, `lon`, `khong-hop-le`. Danh sách và mô tả từng test: [3_Testcase/README.md](3_Testcase/README.md). Đáp án lấy từ vét cạn (n ≤ 8), Floyd-Warshall (n ≤ 300) hoặc Bellman-Ford (đồ thị lớn), luôn đối chiếu chéo khi sinh.
 
 ## 5. Định dạng input
 
