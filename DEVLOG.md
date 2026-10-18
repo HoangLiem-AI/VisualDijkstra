@@ -313,6 +313,27 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 
 ---
 
+### #17 — 18/10/2026 — Thống nhất ký hiệu V, E trong kịch bản và report
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5; python-docx; Microsoft Word (xuất PDF).
+- **Công đoạn:** video, report.
+- **Prompt (nguyên văn):**
+  > trong kich-ban-demo.md có "Bellman-Ford là thuật toán quy hoạch động. Sau vòng thứ i, dist[v] là đường ngắn nhất dùng tối đa i cạnh. Vì vậy cần tối đa n − 1 vòng, mỗi vòng duyệt tất cả các cạnh, độ phức tạp O(V·E)." thì E là cái gì? không hề thấy trên màn hình, ít ra V còn biết là số cạnh
+
+  > " Vì vậy cần tối đa n − 1 vòng" cái n này là gì không thấy định nghĩa, n cũng là số đỉnh là V sao?
+
+  > hãy giúp tôi sửa dùng 1 loại ký hiệu đi
+- **Kết quả AI trả về (tóm tắt):**
+  - Giải thích: V là số đỉnh (không phải số cạnh), E là số cạnh; n, m ở dòng đầu input chính là V, E. Đường ngắn nhất không đi lại đỉnh nên có tối đa V − 1 cạnh → Bellman-Ford cần tối đa V − 1 vòng.
+  - Kịch bản video: định nghĩa V, E một lần ở cảnh 1 (ngay sau phần định dạng input), đổi "n − 1" thành "V − 1" ở cảnh 4 và cảnh 6, câu Bellman-Ford giải thích thêm vì sao là V − 1 vòng.
+  - Report: thêm câu định nghĩa V, E là số đỉnh, số cạnh (= n, m của input) ở mục 2.1; đổi "n − 1" thành "V − 1" ở chương 5, chương 7 và bảng so sánh. Giữ nguyên `n m s [t]` trong định dạng input và cột "n" trong bảng benchmark vì đó là tên trường dữ liệu.
+- **File tạo / sửa:** `2_VideoDemo/kich-ban-demo.md`, `4_Report/BaoCao.docx`, `4_Report/BaoCao.pdf`, `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:**
+  - Kịch bản và report dùng lẫn n và V cho cùng một đại lượng, E không được định nghĩa trên màn hình → SV phát hiện khi đọc kịch bản; thống nhất dùng V, E.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thống nhất ký hiệu V, E trong report"
+
+---
+
 ## Nhật ký lỗi
 
 | # | Ngày | Mô tả lỗi | Phát hiện bằng | Nguyên nhân | Cách sửa | Commit |
@@ -321,6 +342,7 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 | 2 | 15/10 | `npm start` / `npm install` báo "npm.ps1 cannot be loaded because running scripts is disabled" trong terminal VS Code | SV chạy thử trên máy | PowerShell Execution Policy chặn `npm.ps1` (môi trường, không phải lỗi code) | Dùng `node scripts/serve.js` hoặc `npm.cmd start`; ghi hướng dẫn vào README | (commit #9) |
 | 3 | 15/10 | Kiểm tra ngẫu nhiên gần như không sinh ca "cạnh âm, không chu trình âm" (1/3000) | Đếm số ca theo loại trong script kiểm tra chéo | LCG `seed % k` dùng bit thấp chu kỳ ngắn, các lựa chọn liên tiếp phụ thuộc nhau | Đổi sang mulberry32 (387/3000) | (commit #11) |
 | 4 | 15/10 | Ví dụ chu trình âm: các cạnh của chu trình chồng lên nhau, không nhìn thấy | Chụp màn hình Chrome headless | Bố cục cây xếp đỉnh thẳng hàng | Ví dụ tự chọn bố cục vòng tròn | (commit #11) |
+| 5 | 18/10 | Kịch bản video và report dùng lẫn n và V cho số đỉnh; E (số cạnh) không được định nghĩa | SV đọc kịch bản | Ký hiệu input (n, m) và ký hiệu sách (V, E) viết lẫn | Thống nhất dùng V, E, định nghĩa một lần | (commit #17) |
 
 ## Các quyết định thiết kế
 
