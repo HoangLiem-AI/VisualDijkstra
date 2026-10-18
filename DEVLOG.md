@@ -251,6 +251,27 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 - **Kiểm chứng của SV:** _(...)_
 - **Commit / ảnh chụp:** "Thêm kịch bản video demo"
 
+### #14 — 18/10/2026 — Bản nháp report (Word + PDF)
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5; Chrome headless (chụp ảnh giao diện); Python (python-docx, matplotlib); Microsoft Word (cập nhật mục lục, xuất PDF).
+- **Công đoạn:** report.
+- **Prompt (nguyên văn):**
+  > vậy làm report giúp tôi đi, cái nào tôi dể review và chỉnh sửa thì làm cái đó
+- **Kết quả AI trả về (tóm tắt):**
+  - Chọn **Word (.docx)** vì SV dễ đọc lại và sửa trực tiếp (không cần biết LaTeX), xuất PDF bằng Word.
+  - `4_Report/BaoCao.docx` + `BaoCao.pdf` (34 trang): bìa, mục lục tự động, 9 chương — giới thiệu; cơ sở lý thuyết (chứng minh tính đúng Dijkstra, độ phức tạp, lazy deletion, Bellman-Ford, vì sao sai với cạnh âm); thiết kế (kiến trúc trace, quyết định thiết kế); cài đặt và giao diện; ví dụ thống nhất (bảng đủ 23 bước trace, ảnh các bước 6/12/21/23, so sánh 3 thuật toán, cạnh âm, chu trình âm); kiểm thử (mutation test); benchmark (bảng + biểu đồ); quá trình xây dựng và dùng AI (dòng thời gian prompt, nhật ký lỗi, phân công SV/AI); kết luận, hướng phát triển; tài liệu tham khảo.
+  - Chỗ SV phải tự điền / tự viết được **tô vàng** `[...]`: họ tên, MSSV, lớp, giảng viên, tên khoa, link video, slide môn học, phần kiểm chứng của SV (8.4), phân công (8.5), nhận xét về việc dùng AI (8.6). AI không viết thay các phần này.
+  - `4_Report/tools/`: `xuat-trace.mjs` (trace thật → `so-lieu/trace-vi-du.json`, bảng trace trong report lấy từ đây), `ve-bieu-do.py` (biểu đồ benchmark → `hinh/bd-thua.png`, `bd-day.png`), `tao-report.py` (dựng bản nháp; không ghi đè `BaoCao.docx` đã có trừ khi thêm `--ghi-de`, để không mất phần SV đã sửa).
+  - `4_Report/hinh/`: 10 ảnh chụp giao diện (`h01`–`h10`) chụp tự động bằng Chrome headless, cắt vùng khi đưa vào report.
+- **File tạo / sửa:** `4_Report/{BaoCao.docx, BaoCao.pdf}`, `4_Report/tools/{xuat-trace.mjs, ve-bieu-do.py, tao-report.py}`, `4_Report/hinh/*.png`, `4_Report/so-lieu/trace-vi-du.json`, `README.md`, `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:**
+  - Ảnh chụp lần đầu bị cắt mất bảng "So sánh với Bellman-Ford" ở cuối cột trái → tăng chiều cao khung chụp.
+  - Tiêu đề chương hiện font Calibri dù đã đặt Times New Roman (kiểu Heading của Word dùng font theo theme) → xóa thuộc tính font theme. Độ rộng cột bảng bị Word bỏ qua → tắt autofit, ghi độ rộng vào lưới bảng.
+  - Script xuất PDF chạy trong một tiến trình PowerShell riêng thì Word (chạy ẩn) bị treo, chạy trực tiếp thì không; không tìm ra nguyên nhân trong thời gian cho phép → bỏ script, hướng dẫn SV xuất PDF bằng tay trong Word (File → Save As → PDF). Phải tắt các tiến trình Word ẩn bị treo.
+  - Các số liệu trong report (số bước, thống kê heap, kết quả test, benchmark) đều lấy từ file kết quả / trace thật; các phép tính so sánh (84 lần, 48 lần, 34 %) đã tính lại từ bảng benchmark.
+  - Nhận định về tên khoa trên bìa chưa chắc chắn → để ô tô vàng cho SV kiểm tra.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thêm bản nháp report Word và PDF"
+
 ---
 
 ## Nhật ký lỗi
@@ -282,3 +303,4 @@ Dòng ghi "(đề xuất)" là gợi ý của AI; SV xác nhận hoặc sửa l�
 | 17/10 | (đề xuất) Chấm đường đi bằng kiểm tra hợp lệ + độ dài, không so chuỗi | So khớp chuỗi với `.out` | Có thể có nhiều đường ngắn nhất bằng nhau |
 | 17/10 | (đề xuất) Đáp án test lớn bằng Bellman-Ford có dừng sớm | Dùng Dijkstra làm đáp án | Nguồn đáp án độc lập với thuật toán đang kiểm tra |
 | 17/10 | (đề xuất) Test có cạnh âm: Dijkstra đạt khi báo đúng lỗi cạnh âm | Bỏ qua Dijkstra trên các test này | Kiểm tra luôn yêu cầu "báo lỗi rõ ràng, không crash" |
+| 18/10 | (đề xuất) Report bằng Word (.docx), xuất PDF bằng Word | LaTeX | SV dễ đọc lại và sửa trực tiếp |

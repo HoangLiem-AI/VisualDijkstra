@@ -1,0 +1,2655 @@
+{
+ "heap": {
+  "sample": "vi-du-6-dinh",
+  "algorithm": "dijkstra-heap",
+  "input": "6 11 1 6\n1 2 4\n1 3 1\n3 2 2\n2 4 5\n3 4 8\n3 5 10\n2 5 9\n4 5 2\n4 6 6\n5 6 3\n6 4 1",
+  "output": "0\n3\n1\n8\n10\n13\n1 -> 3 -> 2 -> 4 -> 5 -> 6",
+  "stats": {
+   "pushes": 10,
+   "pops": 10,
+   "staleSkips": 4,
+   "relaxations": 10,
+   "improvements": 9
+  },
+  "steps": [
+   {
+    "k": 1,
+    "type": "init",
+    "line": 2,
+    "message": "Khởi tạo: dist[1] = 0, các đỉnh khác = ∞; đẩy (1, 0) vào hàng đợi",
+    "pq": "(1, 0)",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 2,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (1, 0) ra khỏi hàng đợi, chốt dist[1] = 0",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 3,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 1→2: ∞ → 4",
+    "pq": "(2, 4)",
+    "dist": [
+     "0",
+     "4",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 4,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 1→3: ∞ → 1",
+    "pq": "(3, 1) (2, 4)",
+    "dist": [
+     "0",
+     "4",
+     "1",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 5,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (3, 1) ra khỏi hàng đợi, chốt dist[3] = 1",
+    "pq": "(2, 4)",
+    "dist": [
+     "0",
+     "4",
+     "1",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 6,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 3→2: 4 → 3",
+    "pq": "(2, 3) (2, 4)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 7,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 3→4: ∞ → 9",
+    "pq": "(2, 3) (2, 4) (4, 9)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "9",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 8,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 3→5: ∞ → 11",
+    "pq": "(2, 3) (2, 4) (4, 9) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "9",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 9,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (2, 3) ra khỏi hàng đợi, chốt dist[2] = 3",
+    "pq": "(2, 4) (4, 9) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "9",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 10,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 2→4: 9 → 8",
+    "pq": "(2, 4) (4, 8) (4, 9) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 11,
+    "type": "relax-fail",
+    "line": 9,
+    "message": "Relax 2→5: 3 + 9 = 12 ≥ 11, giữ nguyên",
+    "pq": "(2, 4) (4, 8) (4, 9) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 12,
+    "type": "skip-stale",
+    "line": 5,
+    "message": "Lấy (2, 4) nhưng đỉnh 2 đã chốt với dist = 3 → bỏ qua phần tử cũ",
+    "pq": "(4, 8) (4, 9) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 13,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (4, 8) ra khỏi hàng đợi, chốt dist[4] = 8",
+    "pq": "(4, 9) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 14,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 4→5: 11 → 10",
+    "pq": "(4, 9) (5, 10) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 15,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 4→6: ∞ → 14",
+    "pq": "(4, 9) (5, 10) (5, 11) (6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "14"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 16,
+    "type": "skip-stale",
+    "line": 5,
+    "message": "Lấy (4, 9) nhưng đỉnh 4 đã chốt với dist = 8 → bỏ qua phần tử cũ",
+    "pq": "(5, 10) (5, 11) (6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "14"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 17,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (5, 10) ra khỏi hàng đợi, chốt dist[5] = 10",
+    "pq": "(5, 11) (6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "14"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "k": 18,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 5→6: 14 → 13",
+    "pq": "(5, 11) (6, 13) (6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "k": 19,
+    "type": "skip-stale",
+    "line": 5,
+    "message": "Lấy (5, 11) nhưng đỉnh 5 đã chốt với dist = 10 → bỏ qua phần tử cũ",
+    "pq": "(6, 13) (6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "k": 20,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (6, 13) ra khỏi hàng đợi, chốt dist[6] = 13",
+    "pq": "(6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "k": 21,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Bỏ qua 6→4: đỉnh 4 đã chốt",
+    "pq": "(6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "k": 22,
+    "type": "skip-stale",
+    "line": 5,
+    "message": "Lấy (6, 14) nhưng đỉnh 6 đã chốt với dist = 13 → bỏ qua phần tử cũ",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "k": 23,
+    "type": "done",
+    "line": 11,
+    "message": "Hàng đợi rỗng → kết thúc. Đường đi ngắn nhất 1→6: 1 → 3 → 2 → 4 → 5 → 6 (độ dài 13)",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "array": {
+  "sample": "vi-du-6-dinh",
+  "algorithm": "dijkstra-array",
+  "input": "6 11 1 6\n1 2 4\n1 3 1\n3 2 2\n2 4 5\n3 4 8\n3 5 10\n2 5 9\n4 5 2\n4 6 6\n5 6 3\n6 4 1",
+  "output": "0\n3\n1\n8\n10\n13\n1 -> 3 -> 2 -> 4 -> 5 -> 6",
+  "stats": {
+   "extractions": 6,
+   "comparisons": 21,
+   "relaxations": 10,
+   "improvements": 9
+  },
+  "steps": [
+   {
+    "k": 1,
+    "type": "init",
+    "line": 2,
+    "message": "Khởi tạo: dist[1] = 0, các đỉnh khác = ∞",
+    "pq": "(1, 0)",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 2,
+    "type": "extract",
+    "line": 6,
+    "message": "Duyệt mảng dist: đỉnh chưa chốt nhỏ nhất là 1 (dist = 0) → chốt",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 3,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 1→2: ∞ → 4",
+    "pq": "(2, 4)",
+    "dist": [
+     "0",
+     "4",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 4,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 1→3: ∞ → 1",
+    "pq": "(3, 1) (2, 4)",
+    "dist": [
+     "0",
+     "4",
+     "1",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 5,
+    "type": "extract",
+    "line": 6,
+    "message": "Duyệt mảng dist: đỉnh chưa chốt nhỏ nhất là 3 (dist = 1) → chốt",
+    "pq": "(2, 4)",
+    "dist": [
+     "0",
+     "4",
+     "1",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 6,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 3→2: 4 → 3",
+    "pq": "(2, 3)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 7,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 3→4: ∞ → 9",
+    "pq": "(2, 3) (4, 9)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "9",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 8,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 3→5: ∞ → 11",
+    "pq": "(2, 3) (4, 9) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "9",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 9,
+    "type": "extract",
+    "line": 6,
+    "message": "Duyệt mảng dist: đỉnh chưa chốt nhỏ nhất là 2 (dist = 3) → chốt",
+    "pq": "(4, 9) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "9",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 10,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 2→4: 9 → 8",
+    "pq": "(4, 8) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 11,
+    "type": "relax-fail",
+    "line": 9,
+    "message": "Relax 2→5: 3 + 9 = 12 ≥ 11, giữ nguyên",
+    "pq": "(4, 8) (5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 12,
+    "type": "extract",
+    "line": 6,
+    "message": "Duyệt mảng dist: đỉnh chưa chốt nhỏ nhất là 4 (dist = 8) → chốt",
+    "pq": "(5, 11)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 13,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 4→5: 11 → 10",
+    "pq": "(5, 10)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 14,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 4→6: ∞ → 14",
+    "pq": "(5, 10) (6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "14"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 15,
+    "type": "extract",
+    "line": 6,
+    "message": "Duyệt mảng dist: đỉnh chưa chốt nhỏ nhất là 5 (dist = 10) → chốt",
+    "pq": "(6, 14)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "14"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "k": 16,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 5→6: 14 → 13",
+    "pq": "(6, 13)",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "k": 17,
+    "type": "extract",
+    "line": 6,
+    "message": "Duyệt mảng dist: đỉnh chưa chốt nhỏ nhất là 6 (dist = 13) → chốt",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "k": 18,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Bỏ qua 6→4: đỉnh 4 đã chốt",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "k": 19,
+    "type": "done",
+    "line": 11,
+    "message": "Đã chốt tất cả các đỉnh → kết thúc. Đường đi ngắn nhất 1→6: 1 → 3 → 2 → 4 → 5 → 6 (độ dài 13)",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "bf": {
+  "sample": "vi-du-6-dinh",
+  "algorithm": "bellman-ford",
+  "input": "6 11 1 6\n1 2 4\n1 3 1\n3 2 2\n2 4 5\n3 4 8\n3 5 10\n2 5 9\n4 5 2\n4 6 6\n5 6 3\n6 4 1",
+  "output": "0\n3\n1\n8\n10\n13\n1 -> 3 -> 2 -> 4 -> 5 -> 6",
+  "stats": {
+   "rounds": 2,
+   "relaxations": 22,
+   "improvements": 8
+  },
+  "steps": [
+   {
+    "k": 1,
+    "type": "init",
+    "line": 2,
+    "message": "Khởi tạo: dist[1] = 0, các đỉnh khác = ∞",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 2,
+    "type": "round",
+    "line": 3,
+    "message": "Vòng 1/5: duyệt lần lượt 11 cạnh",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 3,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 1→2: ∞ → 4",
+    "pq": "",
+    "dist": [
+     "0",
+     "4",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 4,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 1→3: ∞ → 1",
+    "pq": "",
+    "dist": [
+     "0",
+     "4",
+     "1",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 5,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 3→2: 4 → 3",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 6,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 2→4: ∞ → 8",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 7,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 3→4: 1 + 8 = 9 ≥ 8, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 8,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 3→5: ∞ → 11",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 9,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 2→5: 3 + 9 = 12 ≥ 11, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "11",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 10,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→5: 11 → 10",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 11,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→6: ∞ → 14",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "14"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 12,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 5→6: 14 → 13",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 13,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 6→4: 13 + 1 = 14 ≥ 8, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 14,
+    "type": "round",
+    "line": 3,
+    "message": "Vòng 2/5: duyệt lần lượt 11 cạnh",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 15,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 1→2: 0 + 4 = 4 ≥ 3, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 16,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 1→3: 0 + 1 = 1 ≥ 1, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 17,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 3→2: 1 + 2 = 3 ≥ 3, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 18,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 2→4: 3 + 5 = 8 ≥ 8, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 19,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 3→4: 1 + 8 = 9 ≥ 8, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 20,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 3→5: 1 + 10 = 11 ≥ 10, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 21,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 2→5: 3 + 9 = 12 ≥ 10, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 22,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 4→5: 8 + 2 = 10 ≥ 10, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 23,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 4→6: 8 + 6 = 14 ≥ 13, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 24,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 5→6: 10 + 3 = 13 ≥ 13, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 25,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 6→4: 13 + 1 = 14 ≥ 8, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 26,
+    "type": "round",
+    "line": 9,
+    "message": "Vòng 2 không cập nhật gì → dừng sớm",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 27,
+    "type": "done",
+    "line": 12,
+    "message": "Không cạnh nào còn relax được → không có chu trình âm, kết thúc. Đường đi ngắn nhất 1→6: 1 → 3 → 2 → 4 → 5 → 6 (độ dài 13)",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "1",
+     "8",
+     "10",
+     "13"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "negative": {
+  "sample": "canh-am-dijkstra-sai",
+  "algorithm": "dijkstra-heap",
+  "input": "4 4 1 4\n1 2 2\n1 3 5\n3 2 -4\n2 4 3",
+  "output": "0\n2\n5\n5\n1 -> 2 -> 4",
+  "stats": {
+   "pushes": 4,
+   "pops": 4,
+   "staleSkips": 0,
+   "relaxations": 3,
+   "improvements": 3
+  },
+  "steps": [
+   {
+    "k": 1,
+    "type": "init",
+    "line": 2,
+    "message": "Khởi tạo: dist[1] = 0, các đỉnh khác = ∞; đẩy (1, 0) vào hàng đợi",
+    "pq": "(1, 0)",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 2,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (1, 0) ra khỏi hàng đợi, chốt dist[1] = 0",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 3,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 1→2: ∞ → 2",
+    "pq": "(2, 2)",
+    "dist": [
+     "0",
+     "2",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 4,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 1→3: ∞ → 5",
+    "pq": "(2, 2) (3, 5)",
+    "dist": [
+     "0",
+     "2",
+     "5",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 5,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (2, 2) ra khỏi hàng đợi, chốt dist[2] = 2",
+    "pq": "(3, 5)",
+    "dist": [
+     "0",
+     "2",
+     "5",
+     "∞"
+    ],
+    "finalized": [
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 6,
+    "type": "relax-ok",
+    "line": 10,
+    "message": "Relax 2→4: ∞ → 5",
+    "pq": "(3, 5) (4, 5)",
+    "dist": [
+     "0",
+     "2",
+     "5",
+     "5"
+    ],
+    "finalized": [
+     true,
+     true,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 7,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (3, 5) ra khỏi hàng đợi, chốt dist[3] = 5",
+    "pq": "(4, 5)",
+    "dist": [
+     "0",
+     "2",
+     "5",
+     "5"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "k": 8,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Bỏ qua 3→2: đỉnh 2 đã chốt",
+    "pq": "(4, 5)",
+    "dist": [
+     "0",
+     "2",
+     "5",
+     "5"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "k": 9,
+    "type": "extract",
+    "line": 6,
+    "message": "Lấy (4, 5) ra khỏi hàng đợi, chốt dist[4] = 5",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "5",
+     "5"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "k": 10,
+    "type": "done",
+    "line": 11,
+    "message": "Hàng đợi rỗng → kết thúc. Đường đi ngắn nhất 1→4: 1 → 2 → 4 (độ dài 5)",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "5",
+     "5"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "negativeBf": {
+  "sample": "canh-am-dijkstra-sai",
+  "algorithm": "bellman-ford",
+  "input": "4 4 1 4\n1 2 2\n1 3 5\n3 2 -4\n2 4 3",
+  "output": "0\n1\n5\n4\n1 -> 3 -> 2 -> 4",
+  "stats": {
+   "rounds": 2,
+   "relaxations": 8,
+   "improvements": 4
+  },
+  "steps": [
+   {
+    "k": 1,
+    "type": "init",
+    "line": 2,
+    "message": "Khởi tạo: dist[1] = 0, các đỉnh khác = ∞",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 2,
+    "type": "round",
+    "line": 3,
+    "message": "Vòng 1/3: duyệt lần lượt 4 cạnh",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 3,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 1→2: ∞ → 2",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 4,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 1→3: ∞ → 5",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "5",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 5,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 3→2: 2 → 1",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 6,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 2→4: ∞ → 4",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 7,
+    "type": "round",
+    "line": 3,
+    "message": "Vòng 2/3: duyệt lần lượt 4 cạnh",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 8,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 1→2: 0 + 2 = 2 ≥ 1, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 9,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 1→3: 0 + 5 = 5 ≥ 5, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 10,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 3→2: 5 + -4 = 1 ≥ 1, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 11,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 2→4: 1 + 3 = 4 ≥ 4, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 12,
+    "type": "round",
+    "line": 9,
+    "message": "Vòng 2 không cập nhật gì → dừng sớm",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 13,
+    "type": "done",
+    "line": 12,
+    "message": "Không cạnh nào còn relax được → không có chu trình âm, kết thúc. Đường đi ngắn nhất 1→4: 1 → 3 → 2 → 4 (độ dài 4)",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "5",
+     "4"
+    ],
+    "finalized": [
+     true,
+     true,
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "cycle": {
+  "sample": "chu-trinh-am",
+  "algorithm": "bellman-ford",
+  "input": "5 5 1 5\n1 2 4\n2 3 1\n3 4 -3\n4 2 1\n4 5 2",
+  "output": "Phát hiện chu trình âm",
+  "stats": {
+   "rounds": 4,
+   "relaxations": 20,
+   "improvements": 17
+  },
+  "steps": [
+   {
+    "k": 1,
+    "type": "init",
+    "line": 2,
+    "message": "Khởi tạo: dist[1] = 0, các đỉnh khác = ∞",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 2,
+    "type": "round",
+    "line": 3,
+    "message": "Vòng 1/4: duyệt lần lượt 5 cạnh",
+    "pq": "",
+    "dist": [
+     "0",
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 3,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 1→2: ∞ → 4",
+    "pq": "",
+    "dist": [
+     "0",
+     "4",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 4,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 2→3: ∞ → 5",
+    "pq": "",
+    "dist": [
+     "0",
+     "4",
+     "5",
+     "∞",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 5,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 3→4: ∞ → 2",
+    "pq": "",
+    "dist": [
+     "0",
+     "4",
+     "5",
+     "2",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 6,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→2: 4 → 3",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "5",
+     "2",
+     "∞"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 7,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→5: ∞ → 4",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "5",
+     "2",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 8,
+    "type": "round",
+    "line": 3,
+    "message": "Vòng 2/4: duyệt lần lượt 5 cạnh",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "5",
+     "2",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 9,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 1→2: 0 + 4 = 4 ≥ 3, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "5",
+     "2",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 10,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 2→3: 5 → 4",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "4",
+     "2",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 11,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 3→4: 2 → 1",
+    "pq": "",
+    "dist": [
+     "0",
+     "3",
+     "4",
+     "1",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 12,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→2: 3 → 2",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "4",
+     "1",
+     "4"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 13,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→5: 4 → 3",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "4",
+     "1",
+     "3"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 14,
+    "type": "round",
+    "line": 3,
+    "message": "Vòng 3/4: duyệt lần lượt 5 cạnh",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "4",
+     "1",
+     "3"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 15,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 1→2: 0 + 4 = 4 ≥ 2, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "4",
+     "1",
+     "3"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 16,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 2→3: 4 → 3",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "3",
+     "1",
+     "3"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 17,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 3→4: 1 → 0",
+    "pq": "",
+    "dist": [
+     "0",
+     "2",
+     "3",
+     "0",
+     "3"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 18,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→2: 2 → 1",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "3",
+     "0",
+     "3"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 19,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→5: 3 → 2",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "3",
+     "0",
+     "2"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 20,
+    "type": "round",
+    "line": 3,
+    "message": "Vòng 4/4: duyệt lần lượt 5 cạnh",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "3",
+     "0",
+     "2"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 21,
+    "type": "relax-fail",
+    "line": 7,
+    "message": "Relax 1→2: 0 + 4 = 4 ≥ 1, giữ nguyên",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "3",
+     "0",
+     "2"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 22,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 2→3: 3 → 2",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "2",
+     "0",
+     "2"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 23,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 3→4: 0 → -1",
+    "pq": "",
+    "dist": [
+     "0",
+     "1",
+     "2",
+     "-1",
+     "2"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 24,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→2: 1 → 0",
+    "pq": "",
+    "dist": [
+     "0",
+     "0",
+     "2",
+     "-1",
+     "2"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 25,
+    "type": "relax-ok",
+    "line": 8,
+    "message": "Relax 4→5: 2 → 1",
+    "pq": "",
+    "dist": [
+     "0",
+     "0",
+     "2",
+     "-1",
+     "1"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   {
+    "k": 26,
+    "type": "negative-cycle",
+    "line": 11,
+    "message": "Sau 4 vòng cạnh 2→3 vẫn relax được → có chu trình âm: 2 → 3 → 4 → 2. Không tồn tại đường đi ngắn nhất.",
+    "pq": "",
+    "dist": [
+     "0",
+     "0",
+     "2",
+     "-1",
+     "1"
+    ],
+    "finalized": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   }
+  ]
+ }
+}

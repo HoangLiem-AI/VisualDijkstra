@@ -201,7 +201,8 @@ Lỗi: Đồ thị có cạnh trọng số âm: Dijkstra không đảm bảo đ�
                    gen-tests.js, run-tests.js, brute-force.js, benchmark.js
                    (+ rng.js: số ngẫu nhiên có seed, generators.js: sinh đồ thị)
 3_Testcase/        bộ testcase: nho, bien, dac-biet, lon, khong-hop-le (.in + .out)
-4_Report/          báo cáo; so-lieu/ chứa kết quả kiểm thử và benchmark
+4_Report/          báo cáo BaoCao.docx / .pdf; hinh/ ảnh chụp và biểu đồ; so-lieu/ kết quả kiểm thử,
+                   benchmark, trace ví dụ; tools/ script tạo bản nháp report
 CLAUDE.md          quy ước dự án cho Claude Code
 DEVLOG.md          nhật ký phát triển
 ```
