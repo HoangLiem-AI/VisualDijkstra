@@ -274,6 +274,28 @@ pm.ps1 cannot be loaded because running scripts is disabled on this system. For 
 
 ---
 
+### #15 — 18/10/2026 — Deploy giao diện web lên GitHub Pages
+- **Công cụ:** Claude Code (CLI), model Claude Opus 5.5; GitHub Pages.
+- **Công đoạn:** deploy.
+- **Prompt (nguyên văn):**
+  > có vẻ tôi cần dụng web này lên sever để chạy public để cô có thể truy cập được, chứ không phải là localhost, với email sinh viên cách đơn giản nhất để deploy project này lên thì làm như thế nào?
+
+  > để lại kich-ban-demo chưa cần commit, hay thêm để pages có thể hoạt động, với lại tôi vào setting -> pages thì đâu tiên là Add domain, thì domain là add gì?
+- **Kết quả AI trả về (tóm tắt):**
+  - Đề xuất GitHub Pages: web tĩnh, không cần server, miễn phí với repo public. Đã kiểm tra code: import đều là đường dẫn tương đối, chữ thường (Pages phân biệt hoa/thường), không gọi `localhost` → không phải sửa code.
+  - Thêm `index.html` ở thư mục gốc để chuyển sang `1_SourceCode/` → link gọn `https://hoangliem-ai.github.io/VisualDijkstra/`. Thêm `.nojekyll` để Pages phục vụ file nguyên trạng, không chạy Jekyll.
+  - Ghi link vào README; thêm `~$*` (file khóa tạm của Word) vào `.gitignore`.
+  - "Add domain" là mục Verified domains trong Settings của **tài khoản**, không cần dùng; phải vào Settings của **repo** → Pages, chọn Deploy from a branch, `main`, `/(root)`.
+- **File tạo / sửa:** `index.html`, `.nojekyll`, `.gitignore`, `README.md`, `DEVLOG.md`.
+- **Vấn đề gặp phải và cách giải quyết:**
+  - `index.html` của web nằm trong `1_SourceCode/`, còn Pages chỉ phục vụ từ thư mục gốc hoặc `/docs` → trang chuyển hướng ở gốc, không phải di chuyển code.
+  - SV vào nhầm trang Settings của tài khoản (thấy "Add domain") → hướng dẫn vào Settings của repo.
+  - `2_VideoDemo/kich-ban-demo.md` SV đang sửa → để nguyên, không commit theo yêu cầu.
+- **Kiểm chứng của SV:** _(...)_
+- **Commit / ảnh chụp:** "Thêm trang gốc để deploy lên GitHub Pages"
+
+---
+
 ## Nhật ký lỗi
 
 | # | Ngày | Mô tả lỗi | Phát hiện bằng | Nguyên nhân | Cách sửa | Commit |

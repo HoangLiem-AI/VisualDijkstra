@@ -12,6 +12,8 @@ Có hai cách dùng:
 - **Giao diện web**: nhập đồ thị, xem từng bước trên hình vẽ (mục 2).
 - **Script console**: in toàn bộ các bước ra terminal, dùng để kiểm tra nhanh (mục 3).
 
+**Bản chạy online (GitHub Pages):** https://hoangliem-ai.github.io/VisualDijkstra/ — mở bằng trình duyệt, không cần cài gì.
+
 ## 1. Cài đặt
 
 Chỉ cần **Node.js ≥ 18**. Dự án không có thư viện ngoài nên không phải chạy `npm install`.
